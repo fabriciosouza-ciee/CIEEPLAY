@@ -1,5 +1,5 @@
 // Troque o número da versão a cada atualização dos arquivos para o celular baixar a nova versão.
-const VERSAO = 'ciee-play-v1';
+const VERSAO = 'ciee-play-v2';
 const ARQUIVOS = ['./', './index.html', './playing.html', './admin.html', './manifest.json',
   './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 

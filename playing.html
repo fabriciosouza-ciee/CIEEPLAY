@@ -532,13 +532,45 @@
         .hex1 { width: 120px; height: 104px; top: 8%; left: 4%; } .hex2 { width: 140px; height: 121px; top: 12%; right: 5%; }
         .hex3 { width: 90px; height: 78px; bottom: 10%; left: 5%; } .hex4 { width: 120px; height: 104px; bottom: 12%; right: 6%; }
         @keyframes floatHex { 0% { transform: translateY(0) rotate(0); } 100% { transform: translateY(-20px) rotate(5deg); } }
+
+        /* ===== Celular / toque: menus por toque e layout responsivo ===== */
+        .dropdown.open .dropdown-menu { display: flex; animation: fadeIn 0.2s ease; }
+        @media (hover: none) { .dropdown:hover:not(.open) .dropdown-menu { display: none; } }
+        .tab-section, .hero-card, .generic-card, .book-card { min-width: 0; }
+        img, iframe { max-width: 100%; }
+        @media (max-width: 700px) {
+            header#main-header { flex-wrap: wrap; gap: 8px; padding: 10px 12px; justify-content: space-between; }
+            .brand-logo { font-size: 1.25rem; }
+            .header-controls { gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+            .color-picker { padding: 5px 8px; gap: 6px; }
+            .user-badge-header { padding: 5px 10px; gap: 8px; }
+            #user-role { display: none; }
+            .main-nav { padding: 8px; gap: 6px; }
+            .nav-btn { padding: 8px 12px; font-size: .85rem; }
+            .main-nav .dropdown { position: static; display: block; }
+            .main-nav .dropdown-menu { left: 8px; right: 8px; top: 100%; min-width: 0; transform: none; max-height: 60vh; overflow-y: auto; text-align: left; }
+            .tab-section { padding: 0 12px; margin: 16px auto; }
+            .hero-card { padding: 16px; flex-direction: column; text-align: center; }
+            .hero-text { min-width: 0; }
+            .hero-text h1, .section-title { font-size: 1.35rem; }
+            .books-grid, .team-grid, .lost-found-grid, .schedule-grid, .mural-grid, .mural-layout .mural-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+            .generic-card, .book-card, .team-card, .lost-found-card, .schedule-card, .turma-card { padding: 16px; }
+            .id-card { padding: 20px; }
+            .modal-overlay { padding: 12px; align-items: flex-end; }
+            .modal-box { padding: 20px; border-radius: 22px; max-height: 90vh; overflow-y: auto; }
+            .cal-frame { height: 520px; border-radius: 14px; }
+            .aniv-view { height: 200px; }
+            @keyframes anivScroll { from { transform: translateY(200px); } to { transform: translateY(-100%); } }
+            table { display: block; overflow-x: auto; max-width: 100%; }
+            footer#footer { padding: 14px 10px; }
+        }
     </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0056b3">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="CIEESC PLAY">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 </head>
 <body>
@@ -1252,6 +1284,15 @@
             if (!$('freq-modal').classList.contains('active')) return;
             if (e.key === 'Escape') { e.preventDefault(); cancelRedirect(); }
             else if (e.key === 'Enter') { e.preventDefault(); forceRedirect(); }
+        });
+
+        // Menus suspensos por toque (celular): toque abre/fecha; toque fora ou numa opção fecha
+        document.addEventListener('click', e => {
+            const dd = e.target.closest('.dropdown');
+            const trigger = dd && !e.target.closest('.dropdown-menu');
+            const item = e.target.closest('.dropdown-item');
+            document.querySelectorAll('.dropdown.open').forEach(d => { if (d !== dd || item) d.classList.remove('open'); });
+            if (trigger) dd.classList.toggle('open');
         });
 
         function copyWifiPassword() {
