@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIEESC ▶︎ PLAY • Playing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --theme-primary: #0056b3;
+            --theme-secondary: #6f42c1;
+            --theme-accent: #00b4d8;
+            --theme-text: var(--theme-primary);
+            --bg-gradient: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary), var(--theme-accent));
+            --bg-light: #f4f7f6;
+            --bg-card: #ffffff;
+            --text-dark: #2d3748;
+            --text-muted: #718096;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+            --green: #10b981;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --blue: #3b82f6;
+        }
+
+        body.dark-mode {
+            --bg-light: #121826;
+            --bg-card: #1e293b;
+            --text-dark: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --white: #1e293b;
+            --theme-text: color-mix(in srgb, var(--theme-primary) 45%, #ffffff);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Topo / Navbar */
+        header {
+            background: var(--theme-primary);
+            color: #ffffff;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .brand-logo {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Seletor de Cores e Temas */
+        .color-picker {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .color-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            transition: transform 0.2s;
+        }
+        .color-dot:hover { transform: scale(1.25); }
+        .color-dot.rosa { background-color: #d63384; }
+        .color-dot.roxo { background-color: #6f42c1; }
+        .color-dot.azul { background-color: #0056b3; }
+
+        .btn-theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Dropdowns */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--bg-card);
+            min-width: 200px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-radius: 15px;
+            z-index: 1001;
+            border: 2px solid var(--border-color);
+            padding: 10px 0;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .dropdown:hover .dropdown-menu {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+        .dropdown-menu.right-align {
+            left: auto;
+            right: 0;
+        }
+        .dropdown-item {
+            padding: 10px 20px;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+        .dropdown-item:hover {
+            background-color: rgba(0,0,0,0.04);
+            color: var(--theme-primary);
+        }
+
+        .user-badge-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 6px 16px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+        }
+
+        /* Navegação Principal */
+        .main-nav {
+            background: var(--bg-card);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            z-index: 500;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid transparent;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-weight: 800;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: rgba(0,0,0,0.05);
+            color: var(--theme-primary);
+            border-color: var(--theme-primary);
+        }
+
+        /* Hero / Seção de Boas-vindas */
+        .hero-banner { margin-bottom: 25px; }
+
+        .hero-card {
+            background: var(--bg-card);
+            border-radius: 28px;
+            padding: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 2px solid var(--border-color);
+        }
+
+        .hero-text { flex: 1; min-width: 280px; }
+        .hero-text h1 {
+            font-family: 'Fredoka', cursive;
+            color: var(--theme-primary);
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+
+        .xp-pill {
+            background: linear-gradient(135deg, var(--theme-primary), #059669);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* Layout de Abas */
+        .tab-section {
+            display: none;
+            max-width: 1200px;
+            width: 100%;
+            margin: 25px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+        .tab-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grids Gerais */
+        .books-grid, .team-grid, .lost-found-grid, .schedule-grid, .mural-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        /* Cards Estilizados */
+        .generic-card, .book-card, .team-card, .lost-found-card, .schedule-card, .turma-card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            border: 2px solid var(--border-color);
+            transition: transform 0.2s;
+        }
+        .generic-card:hover, .book-card:hover, .lost-found-card:hover, .schedule-card:hover { transform: translateY(-5px); }
+
+        .book-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: white;
+        }
+        .status-disp { background: var(--green); }
+        .status-res { background: var(--yellow); color: var(--text-dark); }
+        .status-emp { background: var(--red); }
+        .status-action { background: var(--theme-primary); }
+
+        .book-code, .badge-info {
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: var(--theme-primary);
+            background: rgba(0,0,0,0.05);
+            padding: 3px 8px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .book-title, .card-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+            color: var(--text-dark);
+        }
+
+        .book-author, .card-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-action:hover { opacity: 0.9; transform: scale(1.02); }
+        .btn-reserve { background: var(--theme-primary); color: white; }
+        .btn-swap { background: #6f42c1; color: white; }
+        .btn-fila { background: var(--blue); color: white; }
+        .btn-devolve { background: var(--red); color: white; }
+
+        /* Acervo Controls */
+        .acervo-controls {
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .search-bar, .dropdown-custom, .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 3px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-dark);
+            border-radius: 20px;
+            font-size: 1.1rem;
+            outline: none;
+            transition: border-color 0.3s;
+            font-weight: 700;
+            font-family: 'Nunito', sans-serif;
+            appearance: none;
+        }
+        .search-bar:focus, .dropdown-custom:focus, .form-input:focus { border-color: var(--theme-primary); }
+        .form-input { padding: 10px 15px; font-size: 1rem; border-width: 2px; }
+
+        .dropdown-custom {
+            cursor: pointer;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23718096" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+
+        /* Setores / Carteirinha */
+        .sector-list { display: grid; gap: 12px; }
+        .sector-card {
+            background: var(--bg-card);
+            padding: 18px;
+            border-radius: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            border: 2px solid var(--border-color);
+        }
+
+        .id-card {
+            background: linear-gradient(135deg, var(--theme-primary), #6f42c1);
+            color: white;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Rodapé Unificado */
+        footer#footer {
+            background: var(--bg-card);
+            border-top: 2px solid var(--border-color);
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        /* Modais */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            padding: 20px;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-box {
+            background: var(--bg-card);
+            color: var(--text-dark);
+            padding: 30px;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 2px solid var(--border-color);
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { font-weight: 800; font-size: 0.85rem; display: block; margin-bottom: 5px; }
+        
+        .section-title { font-family: 'Fredoka', cursive; color: var(--theme-primary); font-size: 2rem; margin-bottom: 10px; text-align: center;}
+        .section-desc { color: var(--text-muted); font-weight: 700; text-align: center; margin-bottom: 25px; }
+
+        /* ===== Padronização de fontes e tamanhos com o index.html ===== */
+        .brand-logo { font-size: 1.5rem; }
+        .hero-text h1 { font-size: 2rem; }
+        .section-title { font-size: 2rem; }
+        .section-desc { font-size: .95rem; }
+        .book-title, .card-title { font-size: 1.25rem; }
+        .nav-btn { font-size: .95rem; }
+        .xp-pill { font-size: .85rem; }
+        .btn-action {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.05rem;
+            font-weight: 400;
+            border-radius: 16px;
+            box-shadow: 0 4px 0 rgba(0,0,0,.15);
+        }
+        .btn-action:hover { opacity: 1; filter: brightness(1.1); transform: translateY(-1px); }
+        .search-bar, .dropdown-custom { font-size: .95rem; padding: 12px 16px; border-width: 2px; border-radius: 14px; }
+        .dropdown-custom { padding-right: 44px; }
+        .form-input { font-size: .95rem; padding: 10px 12px; border-radius: 14px; }
+        .form-group label { font-size: .8rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); }
+        footer#footer { font-size: .8rem; }
+
+        /* ===== Telas de status (login necessário / logout) — mesmo desenho do admin.html ===== */
+        .status-screen {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 20px; z-index: 20000;
+            background: linear-gradient(135deg, #0056b3, #6f42c1);
+            background-size: 400% 400%; animation: gradientBG 5s ease infinite; overflow: hidden;
+        }
+        .status-screen.show { display: flex; }
+        body.no-session > *:not(.status-screen):not(script),
+        body.logging-out > *:not(.status-screen):not(script) { display: none !important; }
+        .cloud-shape { position: absolute; background: rgba(255,255,255,.15); backdrop-filter: blur(5px); border-radius: 50px; animation: floatCloud 8s infinite alternate ease-in-out; z-index: 1; pointer-events: none; }
+        .cloud1 { width: 180px; height: 60px; top: 10%; left: 5%; }
+        .cloud2 { width: 220px; height: 80px; bottom: 12%; right: 6%; animation-duration: 10s; }
+        .cloud3 { width: 120px; height: 50px; top: 70%; left: 8%; animation-duration: 6s; }
+        @keyframes floatCloud { 0% { transform: translate(0, 0); } 100% { transform: translate(15px, -25px); } }
+        @keyframes gradientBG { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        .denied-card { position: relative; z-index: 10; background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 24px; padding: 40px 30px; max-width: 460px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,.2); animation: fadeIn .4s ease; }
+        .denied-icon { font-size: 4rem; margin-bottom: 15px; display: inline-block; }
+        .denied-title { font-family: 'Fredoka', cursive; color: var(--red); font-size: 1.8rem; margin-bottom: 12px; }
+        .denied-title.ok { color: var(--green); }
+        .denied-text { color: var(--text-dark); opacity: .85; font-weight: 700; font-size: .98rem; line-height: 1.5; margin-bottom: 25px; }
+        .btn-portal { background: var(--theme-primary); color: #fff; border: none; padding: 12px; border-radius: 16px; font-family: 'Fredoka', cursive; font-size: 1.05rem; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%; box-shadow: 0 4px 0 rgba(0,0,0,.15); }
+        .btn-portal:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+        /* ===== Padronização com o admin.html (fontes e tamanhos) ===== */
+        .brand-logo { font-size: 1.6rem; }
+        .hero-text h1, .section-title { font-family: 'Fredoka', cursive; font-size: 1.6rem; color: var(--theme-text); }
+        .section-desc { font-size: .95rem; }
+        .book-title, .card-title { font-size: 1.15rem; }
+        .nav-btn { font-size: .95rem; }
+        .dropdown-item { font-size: .95rem; }
+        .btn-action { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .85rem; border-radius: 10px; box-shadow: none; padding: 8px 14px; }
+        .btn-action:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .search-bar, .dropdown-custom, .form-input { font-size: .95rem; padding: 12px; border-width: 2px; border-radius: 12px; }
+        .dropdown-custom { padding-right: 44px; }
+        .form-group label { font-size: .85rem; }
+        .book-code, .badge-info { color: var(--theme-text); }
+        .dropdown-item:hover, .nav-btn.active, .nav-btn:hover { color: var(--theme-text); }
+        .btn-swap { background: var(--theme-secondary); }
+        .xp-pill { background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary)); }
+        .id-card { background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary)); }
+        footer#footer { font-size: .85rem; }
+        /* Menu centralizado */
+        .main-nav { justify-content: center; align-items: center; text-align: center; }
+        .main-nav .dropdown { display: flex; justify-content: center; }
+        .main-nav .dropdown-menu { left: 50%; transform: translateX(-50%); text-align: left; }
+        /* Mural: notícias à esquerda, aniversariantes fixo à direita */
+        .mural-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 22px; align-items: start; }
+        .mural-layout .mural-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+        .aniv-aside { position: sticky; top: 90px; }
+        .aniv-card { background: linear-gradient(135deg, var(--bg-card), color-mix(in srgb, var(--yellow) 28%, var(--bg-card))); border: 2px solid var(--border-color); border-radius: 24px; padding: 20px; box-shadow: 0 8px 20px rgba(0,0,0,.05); }
+        .aniv-view { height: 260px; overflow: hidden; position: relative; margin-top: 10px; -webkit-mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); }
+        .aniv-list { list-style: none; position: absolute; left: 0; right: 0; animation: anivScroll var(--aniv-dur, 20s) linear infinite; }
+        .aniv-view:hover .aniv-list { animation-play-state: paused; }
+        .aniv-list li { padding: 8px 4px; font-weight: 800; color: var(--text-dark); border-bottom: 1px dashed var(--border-color); }
+        .aniv-list li small { display: block; color: var(--text-muted); font-weight: 700; }
+        @keyframes anivScroll { from { transform: translateY(260px); } to { transform: translateY(-100%); } }
+        @media (max-width: 860px) { .mural-layout { grid-template-columns: 1fr; } .aniv-aside { position: static; order: -1; } }
+        /* Calendário Outlook */
+        .cal-frame { width: 100%; height: 640px; border: 2px solid var(--border-color); border-radius: 20px; background: var(--bg-card); margin-bottom: 20px; }
+        /* Carteirinha */
+        .card-validade { background: #ffffff; color: #1a202c; padding: 10px; border-radius: 12px; font-weight: 900; margin-bottom: 15px; }
+        body.dark-mode .card-validade { background: rgba(0,0,0,.45); color: #ffd166; border: 2px solid #ffd166; letter-spacing: .3px; text-shadow: 0 0 8px rgba(255,209,102,.45); }
+        .contact-line { color: var(--theme-text); font-weight: 800; text-decoration: none; font-size: .85rem; word-break: break-all; }
+        /* Telas de status: mesmo fundo animado e hexágonos do index.html */
+        .status-screen { background: var(--bg-gradient); background-size: 400% 400%; animation: gradientBG 15s ease infinite; }
+        .hex-shape { position: absolute; z-index: 1; pointer-events: none; animation: floatHex 12s infinite alternate ease-in-out; opacity: .45; }
+        .hex1 { width: 120px; height: 104px; top: 8%; left: 4%; } .hex2 { width: 140px; height: 121px; top: 12%; right: 5%; }
+        .hex3 { width: 90px; height: 78px; bottom: 10%; left: 5%; } .hex4 { width: 120px; height: 104px; bottom: 12%; right: 6%; }
+        @keyframes floatHex { 0% { transform: translateY(0) rotate(0); } 100% { transform: translateY(-20px) rotate(5deg); } }
+    </style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0056b3">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CIEESC PLAY">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+</head>
+<body>
+
+    <!-- Tela: é preciso fazer login primeiro (mesmo design do "Acesso Não Permitido" do admin.html) -->
+    <div id="login-required-screen" class="status-screen">
+<svg class="hex-shape hex1" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.55)" stroke-width="3"/></svg>
+        <svg class="hex-shape hex2" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.55)" stroke-width="3"/></svg>
+        <svg class="hex-shape hex3" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.55)" stroke-width="3"/></svg>
+        <svg class="hex-shape hex4" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.55)" stroke-width="3"/></svg>
+        <div class="denied-card">
+            <span class="denied-icon">🔑</span>
+            <h1 class="denied-title">Faça login primeiro</h1>
+            <p class="denied-text">
+                Para acessar o CIEESC ▶︎ PLAY você precisa entrar com a sua conta.<br>
+                Redirecionando para o login em <strong id="login-required-count">5</strong> segundos...
+            </p>
+            <a href="index.html?acao=login" class="btn-portal">Ir para o login</a>
+        </div>
+    </div>
+
+    <!-- Tela de logout (mesmo design) -->
+    <div id="logout-screen" class="status-screen">
+<svg class="hex-shape hex1" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.55)" stroke-width="3"/></svg>
+        <svg class="hex-shape hex2" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.55)" stroke-width="3"/></svg>
+        <svg class="hex-shape hex3" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.55)" stroke-width="3"/></svg>
+        <svg class="hex-shape hex4" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.55)" stroke-width="3"/></svg>
+        <div class="denied-card">
+            <span class="denied-icon">👋</span>
+            <h1 class="denied-title ok">Você saiu do sistema</h1>
+            <p class="denied-text">
+                Sua sessão foi encerrada com segurança.<br>
+                Redirecionando para o portal em <strong id="logout-count">5</strong> segundos...
+            </p>
+            <a href="index.html" class="btn-portal">Ir agora para o portal</a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="main-header">
+        <div class="brand-logo">
+            CIEESC ▶︎ PLAY
+        </div>
+        <div class="header-controls">
+            <!-- Seletor de Cores -->
+            <div class="color-picker" title="Escolher cor principal">
+                <span class="color-dot rosa" onclick="setThemeColor('#d63384')"></span>
+                <span class="color-dot roxo" onclick="setThemeColor('#6f42c1')"></span>
+                <span class="color-dot azul" onclick="setThemeColor('#0056b3')"></span>
+            </div>
+
+            <button class="btn-theme-toggle" id="btn-theme-toggle" onclick="toggleTheme()" title="Alternar tema claro/escuro">🌙</button>
+
+            <!-- Dropdown do Usuário (Substituindo botões soltos) -->
+            <div class="dropdown">
+                <div class="user-badge-header">
+                    <span id="user-avatar" style="font-size: 1.5rem;">👦</span>
+                    <div>
+                        <div id="user-name" style="font-weight: 900; line-height: 1.1;">Aprendiz</div>
+                        <div id="user-role" style="font-size: 0.75rem; opacity: 0.85;">Nível 1</div>
+                    </div>
+                    <span style="font-size: 0.8rem; margin-left: 5px;">▾</span>
+                </div>
+                <div class="dropdown-menu right-align">
+                    <div class="dropdown-item" id="menu-admin" style="display:none;" onclick="window.location.href='admin.html'">⚙️ Gerenciar</div>
+                    <div class="dropdown-item" onclick="logout()">🚪 Desconectar</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação Principal com Dropdowns -->
+    <nav class="main-nav">
+        <!-- Mural -->
+        <button class="nav-btn active" onclick="switchTab('mural', this)">📌 Mural</button>
+
+        <!-- Acervo -->
+        <div class="dropdown">
+            <button class="nav-btn">📚 Acervo ▾</button>
+            <div class="dropdown-menu" id="menu-acervo">
+                <div class="dropdown-item" onclick="switchTab('acervo-fisico', this)">Acervo físico</div>
+                <div class="dropdown-item" onclick="switchTab('acervo', this)">Acervo digital</div>
+                <a href="https://meclivros.mec.gov.br/" target="_blank" class="dropdown-item extra-acervo">MEC livros ↗</a>
+                <a href="https://www.baixelivros.com.br/" target="_blank" class="dropdown-item extra-acervo">Baixe livros ↗</a>
+            </div>
+        </div>
+
+        <!-- Aprendizagem -->
+        <div class="dropdown">
+            <button class="nav-btn">🧠 Aprendizagem ▾</button>
+            <div class="dropdown-menu">
+                <div class="dropdown-item" onclick="switchTab('cronograma', this)">Calendário</div>
+                <div class="dropdown-item" onclick="openFrequenciaModal()">Minha frequência ↗</div>
+                <div class="dropdown-item" onclick="switchTab('guias', this)">Guias e manuais</div>
+                <div class="dropdown-item" onclick="switchTab('pedagogico', this)">Meu orientador(a)</div>
+                <div class="dropdown-item" onclick="switchTab('monitoria', this)">Monitoria</div>
+                <div class="dropdown-item" onclick="switchTab('turmas', this)">Turmas</div>
+                <div class="dropdown-item" onclick="switchTab('wifi', this)">Wi-fi</div>
+                <div class="dropdown-item" onclick="switchTab('faq', this)">Dúvidas Frequentes</div>
+            </div>
+        </div>
+
+        <!-- Artes em Foco -->
+        <button class="nav-btn" onclick="switchTab('artes', this)">🎨 Artes em foco</button>
+
+        <!-- Outros -->
+        <button class="nav-btn" onclick="switchTab('achados', this)">🔍 Achados & Perdidos</button>
+        <button class="nav-btn" onclick="switchTab('administrativo', this)">🏢 Equipe adm</button>
+
+        <!-- Meu Acesso -->
+        <div class="dropdown">
+            <button class="nav-btn">👤 Meu acesso ▾</button>
+            <div class="dropdown-menu">
+                <div class="dropdown-item" onclick="switchTab('carteirinha', this)">Ver carteirinha</div>
+                <div class="dropdown-item" onclick="switchTab('configuracoes', this)">Configurações</div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- ================= ABAS DO SISTEMA ================= -->
+
+    <!-- ABA: MURAL -->
+    <section id="tab-mural" class="tab-section active">
+        <div class="hero-banner">
+            <div class="hero-card">
+                <div class="hero-text">
+                    <h1 id="welcome-title">Bem-vindo(a) ao CIEESC ▶︎ PLAY! 🚀</h1>
+                    <p style="color: var(--text-muted); font-weight: 700;">Empréstimos com prazo de 30 dias. Renove ou devolva facilmente!</p>
+                    <div class="xp-pill">⭐ 120 XP Acumulados • 🥉 Leitor Iniciante</div>
+                </div>
+            </div>
+        </div>
+        <h2 class="section-title">Mural de avisos</h2>
+        <p class="section-desc">Fique por dentro das notícias, dicas e aniversariantes do mês!</p>
+        <div class="mural-layout">
+            <div class="mural-grid" id="mural-posts">
+                <div class="generic-card">
+                    <span class="badge-info">Dica da monitoria</span>
+                    <h3 class="card-title">Como organizar seus estudos</h3>
+                    <p class="card-subtitle">Separe 30 minutos diários para revisar os manuais de aprendizagem. A constância é a chave!</p>
+                </div>
+                <div class="generic-card">
+                    <span class="badge-info">Notícia</span>
+                    <h3 class="card-title">Nova parceria CIEE</h3>
+                    <p class="card-subtitle">Estamos com novos cursos disponíveis na plataforma online. Não perca!</p>
+                </div>
+            </div>
+            <aside class="aniv-aside">
+                <div class="aniv-card">
+                    <h3 class="card-title">🎂 Aniversariantes do mês</h3>
+                    <div class="aniv-view" id="aniv-view"><ul class="aniv-list" id="aniv-list"></ul></div>
+                    <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-muted); font-weight: 700;">Deixe seus parabéns aos colegas!</p>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <!-- ABA: ACERVO FÍSICO (empréstimos) -->
+    <section id="tab-acervo-fisico" class="tab-section">
+        <h2 class="section-title">Acervo físico</h2>
+        <p class="section-desc">Consulte, empreste, renove e devolva os livros da biblioteca da sua unidade. Prazo de 30 dias.</p>
+        <div class="acervo-controls">
+            <input type="text" class="search-bar" id="search-input" placeholder="🔍 Pesquise por título, autor, código..." onkeyup="filterBooksText()">
+            <select class="dropdown-custom" id="category-select" onchange="filterCategory(this.value)">
+                <option value="Todos">📚 Todas as Categorias</option>
+                <option value="LIT">🇧🇷 Literatura Brasileira</option>
+                <option value="ADM">💼 Administração & Negócios</option>
+                <option value="DES">🚀 Desenvolvimento Pessoal</option>
+                <option value="PSI">🧠 Psicologia & Saúde Mental</option>
+                <option value="DIR">⚖️ Direito & Cidadania</option>
+            </select>
+        </div>
+        <div class="books-grid" id="books-container"></div>
+    </section>
+
+    <!-- ABA: ACERVO DIGITAL (PDFs e links) -->
+    <section id="tab-acervo" class="tab-section">
+        <h2 class="section-title">Acervo digital</h2>
+        <p class="section-desc">PDFs e links para leitura online ou download (gerenciado pelo painel Admin).</p>
+        <div class="acervo-controls">
+            <input type="text" class="search-bar" id="dig-busca" placeholder="🔍 Pesquise por título, autor..." onkeyup="renderDigitais()">
+            <select class="dropdown-custom" id="dig-cat" onchange="renderDigitais()">
+                <option value="Todos">📚 Todas as Categorias</option>
+            </select>
+        </div>
+        <div class="books-grid" id="digital-container"></div>
+    </section>
+
+        <!-- ABA: CRONOGRAMA -->
+    <section id="tab-cronograma" class="tab-section">
+        <h2 class="section-title">Calendário</h2>
+        <p class="section-desc">Fique por dentro dos eventos, atividades e feriados.</p>
+        <div id="cal-outlook"></div>
+    </section>
+
+    <!-- ABA: GUIAS E MANUAIS -->
+    <section id="tab-guias" class="tab-section">
+        <h2 class="section-title">Guias e Manuais</h2>
+        <p class="section-desc">Faça o download de materiais importantes para a sua jornada.</p>
+        <div class="mural-grid">
+            <div class="generic-card" style="align-items: center; text-align: center;">
+                <h3 class="card-title" style="margin-bottom: 15px;">Manual do Jovem Aprendiz</h3>
+                <button class="btn-action btn-reserve">⬇️ Baixar PDF</button>
+            </div>
+            <div class="generic-card" style="align-items: center; text-align: center;">
+                <h3 class="card-title" style="margin-bottom: 15px;">Código de Conduta</h3>
+                <button class="btn-action btn-reserve">⬇️ Baixar PDF</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABA: PEDAGÓGICO (Orientadores) -->
+    <section id="tab-pedagogico" class="tab-section">
+        <h2 class="section-title">Meu Orientador</h2>
+        <p class="section-desc">Conheça os orientadores da sua unidade.</p>
+        <div class="team-grid" id="team-container">
+            <!-- Renderizado via JS -->
+        </div>
+    </section>
+
+    <!-- ABA: MONITORIA -->
+    <section id="tab-monitoria" class="tab-section">
+        <h2 class="section-title">Monitoria</h2>
+        <p class="section-desc">Monitores prontos para tirar suas dúvidas e auxiliar no dia a dia.</p>
+        <div class="team-grid" id="monitoria-container">
+            <!-- Renderizado via JS -->
+        </div>
+    </section>
+
+    <!-- ABA: TURMAS -->
+    <section id="tab-turmas" class="tab-section">
+        <h2 class="section-title">Turmas Cadastradas</h2>
+        <p class="section-desc">Informações sobre as turmas ativas.</p>
+        <div class="books-grid" id="turmas-container">
+            <!-- Renderizado via JS dinamicamente -->
+        </div>
+    </section>
+
+    <!-- ABA: DÚVIDAS FREQUENTES (FAQ) -->
+    <section id="tab-faq" class="tab-section">
+        <h2 class="section-title">Dúvidas Frequentes (FAQ)</h2>
+        <p class="section-desc">Respostas rápidas para as principais dúvidas (Gerenciado no Admin).</p>
+        <div class="generic-card">
+            <h3 class="card-title">Como funciona a renovação do acervo digital?</h3>
+            <p class="card-subtitle" style="margin:0;">Você tem 30 dias de empréstimo. O botão de renovar aparecerá 7 dias antes do vencimento. Pode ser renovado múltiplas vezes!</p>
+        </div>
+    </section>
+
+    <!-- ABA: ARTES EM FOCO -->
+    <section id="tab-artes" class="tab-section">
+        <h2 class="section-title">Artes em Foco</h2>
+        <p class="section-desc">Explore plataformas dedicadas à cultura e expressão artística.</p>
+        <div class="mural-grid">
+            <div class="generic-card" style="text-align: center;">
+                <h3 class="card-title">Galeria Virtual</h3>
+                <p class="card-subtitle">Uma prévia das exposições online que nossos jovens acompanham.</p>
+                <button class="btn-action btn-reserve" onclick="alert('Funcionalidade gerenciada no painel admin!')">Acessar Prévia</button>
+            </div>
+            <div class="generic-card" style="text-align: center;">
+                <h3 class="card-title">Concurso de Desenhos</h3>
+                <p class="card-subtitle">Veja as artes vencedoras deste semestre.</p>
+                <button class="btn-action btn-swap">Ver Galeria</button>
+            </div>
+            <div class="generic-card" style="text-align: center;">
+                <h3 class="card-title">Museu do Louvre</h3>
+                <p class="card-subtitle">Tour virtual pelas galerias do Louvre.</p>
+                <button class="btn-action btn-reserve" onclick="window.open('https://www.louvre.fr/en/online-tours','_blank','noopener')">Visitar ↗</button>
+            </div>
+            <div class="generic-card" style="text-align: center;">
+                <h3 class="card-title">Tarsila do Amaral</h3>
+                <p class="card-subtitle">Vida e obra de Tarsila do Amaral.</p>
+                <button class="btn-action btn-reserve" onclick="window.open('https://www.tarsiladoamaral.com.br/','_blank','noopener')">Visitar ↗</button>
+            </div>
+            <div class="generic-card" style="text-align: center;">
+                <h3 class="card-title">Democrart</h3>
+                <p class="card-subtitle">Plataforma de democratização da arte.</p>
+                <button class="btn-action btn-reserve" onclick="window.open('https://www.democrart.com.br/','_blank','noopener')">Visitar ↗</button>
+            </div>
+            <div class="generic-card" style="text-align: center;">
+                <h3 class="card-title">Brics Arts</h3>
+                <p class="card-subtitle">Plataforma de arte dos países BRICS.</p>
+                <button class="btn-action btn-reserve" onclick="window.open('https://bricsarts.com/','_blank','noopener')">Visitar ↗</button>
+            </div>
+            <div class="generic-card" style="text-align: center;">
+                <h3 class="card-title">Brics Art Games</h3>
+                <p class="card-subtitle">Jogos e arte do BRICS.</p>
+                <button class="btn-action btn-reserve" onclick="window.open('https://bricsartgames.ru/en/','_blank','noopener')">Visitar ↗</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABA: ACHADOS E PERDIDOS -->
+    <section id="tab-achados" class="tab-section">
+        <h2 class="section-title">Achados & Perdidos</h2>
+        <p class="section-desc">Esqueceu algum pertence na unidade? Confira os itens encontrados recentemente.</p>
+        <div class="lost-found-grid" id="lost-found-container">
+            <!-- Renderizado via JS -->
+        </div>
+    </section>
+
+    <!-- ABA: WI-FI -->
+    <section id="tab-wifi" class="tab-section">
+        <div style="background: var(--bg-card); padding: 30px; border-radius: 28px; text-align: center; max-width: 500px; margin: 0 auto; border: 2px solid var(--border-color);">
+            <h2 style="font-family: 'Fredoka', cursive; color: var(--theme-primary); margin-bottom: 10px;">Conecta Wi-Fi CIEE</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">Aponte a câmera do seu celular para o QR Code abaixo para se conectar automaticamente:</p>
+            <div style="background: #ffffff; padding: 20px; border-radius: 20px; display: inline-block; margin-bottom: 20px;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=WIFI:S:CIEE%20Alunos;T:WPA;P:ciee%23aprendizagem2023;;" alt="QR Code Wi-Fi">
+            </div>
+            <p style="font-weight: 800; margin-bottom: 10px;">Rede: <code>CIEE Alunos</code></p>
+            <button class="btn-action btn-reserve" style="width: 100%;" onclick="copyWifiPassword()">Copiar Senha do Wi-Fi</button>
+        </div>
+    </section>
+
+    <!-- ABA: EQUIPE ADMINISTRATIVA -->
+    <section id="tab-administrativo" class="tab-section">
+        <h2 class="section-title">Equipe administrativa</h2>
+        <p class="section-desc">Contatos dos setores administrativos.</p>
+        <div class="sector-list" id="sectors-container">
+            <!-- Renderizado via JS -->
+        </div>
+    </section>
+
+    <!-- ABA: CARTEIRINHA -->
+    <section id="tab-carteirinha" class="tab-section">
+        <h2 class="section-title">Minha Carteirinha</h2>
+        <div class="id-card">
+            <div id="card-avatar" style="font-size: 3rem; margin-bottom: 10px;">👦</div>
+            <h2 style="font-family: 'Fredoka', cursive; margin-bottom: 5px;" id="card-name">Aprendiz Visitante</h2>
+            <p id="card-cargo" style="font-weight: 800; margin-bottom: 15px; opacity: 0.9;">Jovem aprendiz CIEESC</p>
+            <p id="card-info" style="font-weight: 700; font-size: .85rem; margin-bottom: 15px; opacity: .9;"></p>
+            <div class="card-validade">
+                <span id="card-validade">Validade: -</span>
+            </div>
+            <button class="btn-action" style="background: rgba(255,255,255,0.2); color: white;" onclick="alert('Download iniciado!')">⬇️ Baixar Carteirinha</button>
+        </div>
+    </section>
+
+    <!-- ABA: CONFIGURAÇÕES -->
+    <section id="tab-configuracoes" class="tab-section">
+        <h2 class="section-title">Configurações de Perfil</h2>
+        <div class="generic-card" style="max-width: 500px; margin: 0 auto;">
+            <div class="form-group">
+                <label>Nome de Exibição:</label>
+                <input type="text" class="form-input" id="cfg-nome" autocomplete="name">
+            </div>
+            <div class="form-group">
+                <label>E-mail:</label>
+                <input type="email" class="form-input" id="cfg-email" autocapitalize="off" spellcheck="false" autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label>Nova Senha:</label>
+                <input type="password" class="form-input" id="cfg-pass" placeholder="Digite para trocar a senha..." autocomplete="new-password">
+            </div>
+            <button class="btn-action btn-reserve" onclick="saveProfile()">Salvar Alterações</button>
+        </div>
+    </section>
+
+
+    <!-- Modais -->
+    <div class="modal-overlay" id="freq-modal">
+        <div class="modal-box" style="text-align: center; background: var(--bg-gradient); color: white; border: none;">
+            <h3 style="font-family: 'Fredoka', cursive; font-size: 1.8rem; margin-bottom: 10px;">Redirecionando...</h3>
+            <p style="font-weight: 600;">Você está sendo levado para o portal de Frequências oficial do CIEE.</p>
+            <div id="freq-countdown" style="font-size: 4rem; font-weight: 900; margin: 20px 0;">5</div>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="btn-action" style="background: rgba(255,255,255,0.2); color: white;" onclick="cancelRedirect()">Cancelar</button>
+                <button class="btn-action" style="background: var(--bg-card); color: var(--theme-primary);" onclick="forceRedirect()">Ir agora!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé Unificado -->
+    <footer id="footer">
+        <p>&copy; <span id="current-year"></span></p>
+        <p>CIEESC ▶︎ PLAY • Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // 1. Sincronização de Tema e Cores
+        const COLORS = { blue: ['#0056b3', '#6f42c1', '#00b4d8'], purple: ['#6f42c1', '#d63384', '#0056b3'], pink: ['#d63384', '#6f42c1', '#ff8fab'] };
+        function setThemeColor(color) {
+            const name = { '#0056b3': 'blue', '#6f42c1': 'purple', '#d63384': 'pink' }[color] || 'blue';
+            const c = COLORS[name], r = document.documentElement.style;
+            r.setProperty('--theme-primary', c[0]); r.setProperty('--theme-secondary', c[1]); r.setProperty('--theme-accent', c[2]);
+            localStorage.setItem('ciee_theme_color', color);
+            localStorage.setItem('ciee_color_theme', name);   // compartilhado com index.html e admin.html
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('ciee_theme', isDark ? 'dark' : 'light');
+            document.getElementById('btn-theme-toggle').innerText = isDark ? '☀️' : '🌙';
+        }
+
+        const savedColor = ({ blue: '#0056b3', purple: '#6f42c1', pink: '#d63384' })[localStorage.getItem('ciee_color_theme')] || localStorage.getItem('ciee_theme_color') || '#0056b3';
+        setThemeColor(savedColor);
+
+        const savedMode = localStorage.getItem('ciee_theme') || localStorage.getItem('ciee_theme_mode');
+        if (savedMode === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('btn-theme-toggle').innerText = '☀️';
+        }
+
+        // 2. Sessão vinda do index.html
+        const USERS_KEY = 'ciee_users';
+        const $ = id => document.getElementById(id);
+        function readSession() {
+            try { return JSON.parse(localStorage.getItem('ciee_session') || sessionStorage.getItem('ciee_session')); }
+            catch (e) { return null; }
+        }
+        function showStatus(screenId, countId, url, bodyClass) {
+            document.body.classList.add(bodyClass);
+            document.getElementById(screenId).classList.add('show');
+            let s = 5;
+            const el = document.getElementById(countId);
+            const iv = setInterval(() => {
+                s--; el.textContent = s;
+                if (s <= 0) { clearInterval(iv); location.href = url; }
+            }, 1000);
+        }
+        const sessionData = readSession();
+        if (!sessionData || !sessionData.nome) {
+            showStatus('login-required-screen', 'login-required-count', 'index.html?acao=login', 'no-session');
+            throw new Error('Sem sessão'); // interrompe o restante da página
+        }
+        delete sessionData.senhaHash; delete sessionData.dica;
+        const nivel = sessionData.nivel || 1;
+        const rolesMap = { 1: 'Aprendiz', 2: 'Monitor', 3: 'Orientador', 4: 'Webmaster' };
+        const fmtBR = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+
+        function setPhoto(el, size, radius, border) {
+            if (!sessionData.foto) return; // sem foto: mantém o emoji
+            el.textContent = '';
+            const img = document.createElement('img');
+            img.src = sessionData.foto; img.alt = 'Foto';
+            img.style.cssText = `width:${size}px;height:${size}px;object-fit:cover;border-radius:${radius};border:${border}px solid #fff;display:block;margin:0 auto`;
+            el.appendChild(img);
+        }
+
+        const CARGOS = { 1: 'Jovem aprendiz CIEESC', 2: 'Monitor(a) da Aprendizagem', 3: 'Orientador(a) de Aprendizagem', 4: 'Administrador(a)' };
+        function refreshUserUI() {
+            const first = sessionData.nome.split(' ')[0];
+            $('user-name').innerText = sessionData.nome;
+            $('user-role').innerText = rolesMap[nivel] || 'Aprendiz';
+            $('card-name').innerText = sessionData.nome;
+            $('welcome-title').innerText = `Olá, ${first}! Bem-vindo(a) ao CIEESC ▶︎ PLAY 🚀`;
+            $('card-cargo').innerText = CARGOS[nivel] || CARGOS[1];
+            setPhoto($('user-avatar'), 36, '50%', 2);
+            setPhoto($('card-avatar'), 96, '20px', 3);
+            if (!sessionData.foto && sessionData.avatar) { $('user-avatar').innerText = sessionData.avatar; $('card-avatar').innerText = sessionData.avatar; }
+            $('card-info').innerText = [sessionData.cidade && `📍 ${sessionData.cidade}`, sessionData.periodo].filter(Boolean).join(' • ');
+            const vencida = sessionData.validade && new Date(sessionData.validade + 'T23:59:59') < new Date();
+            $('card-validade').innerText = nivel >= 2 ? 'Validade: Vitalícia' : 'Validade: ' + fmtBR(sessionData.validade) + (vencida ? ' (vencida)' : '');
+            $('cfg-nome').value = sessionData.nome;
+            $('cfg-email').value = sessionData.email || '';
+        }
+        refreshUserUI();
+
+        if (nivel >= 2) $('menu-admin').style.display = 'flex';
+        document.getElementById('current-year').innerText = new Date().getFullYear();
+
+        function logout() {
+            localStorage.removeItem('ciee_session');
+            sessionStorage.removeItem('ciee_session');
+            showStatus('logout-screen', 'logout-count', 'index.html', 'logging-out');
+        }
+
+        // Perfil: mesmas regras do cadastro (nome formatado, e-mail minúsculo, senha média/forte)
+        const NAME_LOWER = ['de', 'da', 'do', 'das', 'dos', 'e'];
+        function formatName(str) {
+            return str.trim().replace(/\s+/g, ' ').toLocaleLowerCase('pt-BR').split(' ').map((w, i) => {
+                if (i > 0 && NAME_LOWER.includes(w)) return w;
+                return w.replace(/(^|[-'’])(\p{L})/gu, (m, sep, ch) => sep + ch.toLocaleUpperCase('pt-BR'));
+            }).join(' ');
+        }
+        function passLevel(t) {
+            if (t.length < 6) return 0;
+            let s = 0;
+            if (t.length >= 8) s++;
+            if (t.length >= 12) s++;
+            if (/[a-z]/.test(t) && /[A-Z]/.test(t)) s++;
+            if (/\d/.test(t)) s++;
+            if (/[^A-Za-z0-9]/.test(t)) s++;
+            return s <= 2 ? 1 : (s === 3 ? 2 : 3);
+        }
+        function passOk(t) {
+            return t.length >= 8 && /\p{Lu}/u.test(t) && /\p{Ll}/u.test(t) && /\d/.test(t) && /[^\p{L}\p{N}\s]/u.test(t);
+        }
+        async function sha256(t) {
+            try {
+                const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
+                return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2, '0')).join('');
+            } catch (e) { return ''; }
+        }
+        function getUsers() {
+            try { const l = JSON.parse(localStorage.getItem(USERS_KEY)); return Array.isArray(l) ? l : []; }
+            catch (e) { return []; }
+        }
+        async function saveProfile() {
+            const nome = formatName($('cfg-nome').value);
+            const email = $('cfg-email').value.trim().toLowerCase();
+            const pass = $('cfg-pass').value;
+            if (!nome) return alert('Informe seu nome.');
+            if (!email || !$('cfg-email').checkValidity()) return alert('Informe um e-mail válido.');
+
+            const oldEmail = (sessionData.email || '').toLowerCase();
+            const users = getUsers();
+            const idx = users.findIndex(u => (u.email || '').toLowerCase() === oldEmail);
+            if (email !== oldEmail && users.some((u, i) => i !== idx && (u.email || '').toLowerCase() === email)) {
+                return alert('Este e-mail já está em uso por outro cadastro.');
+            }
+            let hash = null;
+            if (pass) {
+                if (!passOk(pass)) return alert('A senha deve ter no mínimo 8 caracteres, com letras maiúsculas e minúsculas, número e caractere especial.');
+                hash = await sha256(pass);
+            }
+
+            sessionData.nome = nome; sessionData.email = email;
+            if (idx >= 0) {
+                users[idx] = { ...users[idx], nome, email, ...(hash ? { senhaHash: hash } : {}) };
+                localStorage.setItem(USERS_KEY, JSON.stringify(users));
+            }
+            const store = localStorage.getItem('ciee_session') ? localStorage : sessionStorage;
+            store.setItem('ciee_session', JSON.stringify(sessionData));
+            $('cfg-pass').value = '';
+            refreshUserUI();
+            alert('Perfil salvo com sucesso!');
+        }
+
+        // 3. Base de Dados de Livros & NOVAS REGRAS DE ACERVO
+        let books = [
+            { id: 'LIT-042', title: 'Dom Casmurro', author: 'Machado de Assis', cat: 'LIT', status: 'disp', desc: 'Disponível para Empréstimo.' },
+            // Simulando um livro emprestado para VOCÊ onde falta 8 dias (botão de renovar desativado, pois é liberado 7 dias antes)
+            { id: 'DES-105', title: 'Atenção Plena', author: 'Mark Williams', cat: 'DES', status: 'emp_eu', daysLeft: 8, desc: 'Emprestado para você. Prazo total de 30 dias.' },
+            // Simulando um livro emprestado para VOCÊ onde falta 5 dias (botão de renovar ATIVADO)
+            { id: 'PSI-015', title: 'O Homem em Busca de Sentido', author: 'Viktor Frankl', cat: 'PSI', status: 'emp_eu', daysLeft: 5, desc: 'Emprestado para você. Renove para ganhar +30 dias.' },
+            // Livro emprestado para OUTRO usuário. Botão de "Avise-me".
+            { id: 'DIR-003', title: 'Constituição Ilustrada', author: 'CIEE SC', cat: 'DIR', status: 'emp_outro', desc: 'Emprestado para outro usuário.' }
+        ];
+
+        let currentCat = 'Todos';
+
+        function renderBooks(data) {
+            const container = document.getElementById('books-container');
+            container.innerHTML = data.map(book => {
+                let statusLabel, statusClass, actionButtons;
+                
+                if (book.status === 'disp') {
+                    statusLabel = 'Disponível'; statusClass = 'disp';
+                    actionButtons = `<button class="btn-action btn-reserve" onclick="alert('Empréstimo realizado! Você tem 30 dias com este livro.')">Emprestar (30 dias)</button>`;
+                } else if (book.status === 'emp_eu') {
+                    statusLabel = 'Emprestado (Seu)'; statusClass = 'action';
+                    
+                    // Nova Regra: Renovar apenas <= 7 dias do vencimento. Pode devolver a qualquer momento.
+                    let renewDisabled = book.daysLeft > 7 ? 'disabled style="background:var(--border-color); color:var(--text-muted); cursor:not-allowed;"' : 'class="btn-action btn-swap" onclick="alert(\'Sucesso! Prazo estendido por mais 30 dias a partir da data de hoje.\')"';
+                    let renewText = book.daysLeft > 7 ? `Renovar em ${book.daysLeft - 7} dias` : 'Renovar (+30 dias)';
+
+                    actionButtons = `
+                        <button class="btn-action btn-devolve" onclick="alert('Livro devolvido com sucesso. Os usuários interessados serão notificados.')">Devolver</button>
+                        <button ${renewDisabled}>${renewText}</button>
+                    `;
+                } else if (book.status === 'emp_outro') {
+                    statusLabel = 'Emprestado'; statusClass = 'emp';
+                    // Nova Regra: "Avise-me" envia email quando disponível
+                    actionButtons = `<button class="btn-action btn-fila" onclick="alert('Alerta configurado! Enviaremos um e-mail para seu endereço cadastrado assim que for devolvido.')">🔔 Avise-me</button>`;
+                }
+
+                return `
+                <div class="book-card">
+                    <div>
+                        <span class="book-status status-${statusClass}">${statusLabel}</span>
+                        <span class="book-code">${book.id}</span>
+                        <h3 class="book-title">${book.title}</h3>
+                        <p class="book-author">${book.author}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">${book.desc}</p>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 15px;">
+                        ${actionButtons}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+        renderBooks(books);
+
+        function filterCategory(val) { currentCat = val; applyFilters(); }
+        function filterBooksText() { applyFilters(); }
+        function applyFilters() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = books.filter(b => 
+                (currentCat === 'Todos' || b.cat === currentCat) &&
+                (b.title.toLowerCase().includes(query) || b.author.toLowerCase().includes(query) || b.id.toLowerCase().includes(query))
+            );
+            renderBooks(filtered);
+        }
+
+        // 4. Base Pedagógico & Monitoria
+        const teamMembers = [
+            { name: 'Fabrício Santos', city: 'Tubarão', role: 'Orientador(a)' },
+            { name: 'Sofia Mohammad', city: 'Tubarão', role: 'Orientador(a)' }
+        ];
+        document.getElementById('team-container').innerHTML = teamMembers.map(m => `
+            <div class="team-card" style="align-items: center; text-align: center;">
+                <div style="font-size: 3rem;">👨‍🏫</div>
+                <h3 class="card-title">${m.name}</h3>
+                <p class="card-subtitle">${m.role} • ${m.city}</p>
+                <span class="contact-line">📧 E-mail não informado</span>
+            </div>
+        `).join('');
+
+        const monitores = [
+            { name: 'Lucas Gabriel', city: 'Tubarão', role: 'Monitor' },
+            { name: 'Ana Beatriz', city: 'Imbituba', role: 'Monitora' }
+        ];
+        document.getElementById('monitoria-container').innerHTML = monitores.map(m => `
+            <div class="team-card" style="align-items: center; text-align: center;">
+                <div style="font-size: 3rem;">🤝</div>
+                <h3 class="card-title">${m.name}</h3>
+                <p class="card-subtitle">${m.role} • ${m.city}</p>
+            </div>
+        `).join('');
+
+        const defaultTurmas = [
+            { codigo: 'TURMA-ADM01', nome: 'Serviços Administrativos', orientador: 'Fabrício Santos', cidade: 'Tubarão' },
+            { codigo: 'TURMA-COM02', nome: 'Comércio e Vendas', orientador: 'Sofia Mohammad', cidade: 'Tubarão' }
+        ];
+        document.getElementById('turmas-container').innerHTML = defaultTurmas.map(t => `
+            <div class="turma-card">
+                <span class="book-code">${t.codigo}</span>
+                <h4 class="card-title" style="font-size: 1.1rem; margin-top: 5px;">${t.nome}</h4>
+                <p class="card-subtitle" style="margin-bottom: 8px;">Orientador(a): ${t.orientador}</p>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">📍 ${t.cidade}</p>
+            </div>
+        `).join('');
+
+        // Achados e Perdidos, Equipe Adm...
+        const lostAndFoundItems = [{ item: 'Fone Bluetooth', dia: '18/03', local: 'Sala 02' }];
+        document.getElementById('lost-found-container').innerHTML = lostAndFoundItems.map(item => `
+            <div class="lost-found-card">
+                <div>
+                    <h3 class="card-title" style="text-align: center;">${item.item}</h3>
+                    <div style="margin: 12px 0;">
+                        <div class="badge-info">Encontrado em: ${item.dia}</div>
+                        <div class="badge-info">Local: ${item.local}</div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        const sectors = [
+            { sector: 'Coordenação', name: 'Sylvia Figueiredo', email: 'sylvia.figueiredo@cieesc.org.br' },
+            { sector: 'Assistência Social', name: 'Juliana Honorato', email: 'juliana.honorato@cieesc.org.br' }
+        ];
+        document.getElementById('sectors-container').innerHTML = sectors.map(s => `
+            <div class="sector-card">
+                <div>
+                    <strong style="color: var(--theme-primary);">${s.sector}</strong>
+                    <div style="font-weight: 700; font-size: 0.95rem;">${s.name}</div>
+                </div>
+                <a href="mailto:${s.email}" style="color: var(--theme-primary); font-weight: 800; text-decoration: none;">📧 E-mail</a>
+            </div>
+        `).join('');
+
+        // Controle de Abas c/ suporte para Dropdowns
+        function switchTab(tabId, element) {
+            // Oculta todas as abas
+            document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+            // Remove active de todos os botões no menu principal
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            // Ativa a aba alvo
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.add('active');
+
+            // Gerencia ativação visual do Menu
+            if (element) {
+                if (element.classList.contains('dropdown-item')) {
+                    // Se clicou num item do dropdown, ativa o botão pai do dropdown
+                    const parentBtn = element.closest('.dropdown').querySelector('.nav-btn');
+                    if (parentBtn) parentBtn.classList.add('active');
+                } else {
+                    element.classList.add('active');
+                }
+            }
+        }
+
+        // Modal de Frequências
+        let redirectTimer; let countdownValue = 5;
+        function openFrequenciaModal() {
+            document.getElementById('freq-modal').classList.add('active');
+            countdownValue = 5;
+            document.getElementById('freq-countdown').innerText = countdownValue;
+            redirectTimer = setInterval(() => {
+                countdownValue--;
+                document.getElementById('freq-countdown').innerText = countdownValue;
+                if(countdownValue <= 0) forceRedirect();
+            }, 1000);
+        }
+        function cancelRedirect() {
+            clearInterval(redirectTimer);
+            document.getElementById('freq-modal').classList.remove('active');
+        }
+        function forceRedirect() {
+            clearInterval(redirectTimer);
+            document.getElementById('freq-modal').classList.remove('active');
+            window.open('https://atendimento.centralcieesc.org.br', '_blank');
+        }
+
+        document.addEventListener('keydown', e => {
+            if (!$('freq-modal').classList.contains('active')) return;
+            if (e.key === 'Escape') { e.preventDefault(); cancelRedirect(); }
+            else if (e.key === 'Enter') { e.preventDefault(); forceRedirect(); }
+        });
+
+        function copyWifiPassword() {
+            navigator.clipboard.writeText('ciee#aprendizagem2023');
+            alert('Senha "ciee#aprendizagem2023" copiada com sucesso!');
+        }
+
+        // ===== Visitas, acessos por usuário e presença em tempo real (lidos pelo painel admin) =====
+        // Observação: os dados ficam no localStorage do navegador. Para estatísticas de TODOS os aparelhos
+        // é necessário um servidor; aqui o painel mostra o que foi registrado neste navegador/domínio.
+        function cieeVisit() {
+            try {
+                if (sessionStorage.getItem('ciee_visit')) return;
+                sessionStorage.setItem('ciee_visit', '1');
+                let v; try { v = JSON.parse(localStorage.getItem('ciee_visitas')) || {}; } catch (e) { v = {}; }
+                v.total = (v.total || 0) + 1;
+                v.dias = v.dias || {};
+                const hoje = new Date().toISOString().slice(0, 10);
+                v.dias[hoje] = (v.dias[hoje] || 0) + 1;
+                localStorage.setItem('ciee_visitas', JSON.stringify(v));
+            } catch (e) {}
+        }
+        function cieeTrack(s, pagina) {
+            try {
+                cieeVisit();
+                const LS = localStorage, SS = sessionStorage;
+                const get = (k, d) => { try { const v = JSON.parse(LS.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
+                const put = (k, v) => { try { LS.setItem(k, JSON.stringify(v)); } catch (e) {} };
+                let sid = SS.getItem('ciee_sid');
+                if (!sid) { sid = 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); SS.setItem('ciee_sid', sid); }
+                const chave = String(s.email || s.nome || 'anon').toLowerCase();
+        
+                if (!SS.getItem('ciee_acesso_user')) {           // conta 1 acesso por sessão do navegador
+                    SS.setItem('ciee_acesso_user', '1');
+                    const a = get('ciee_acessos_usuarios', {});
+                    const u = a[chave] || { count: 0 };
+                    a[chave] = { nome: s.nome, email: s.email || '', nivel: s.nivel || 1, count: u.count + 1, ultimo: Date.now() };
+                    put('ciee_acessos_usuarios', a);
+                }
+                const beat = () => {
+                    const p = get('ciee_presenca', {}), agora = Date.now();
+                    Object.keys(p).forEach(k => { if (agora - p[k].ts > 120000) delete p[k]; });
+                    p[sid] = { nome: s.nome, email: s.email || '', nivel: s.nivel || 1, ip: SS.getItem('ciee_ip') || 'consultando…', pagina: pagina, ts: agora };
+                    put('ciee_presenca', p);
+                };
+                const comIp = ip => {
+                    SS.setItem('ciee_ip', ip);
+                    if (s.email) { const m = get('ciee_ips', {}); m[chave] = { ip: ip, ts: Date.now() }; put('ciee_ips', m); }
+                    beat();
+                };
+                if (SS.getItem('ciee_ip')) comIp(SS.getItem('ciee_ip'));
+                else fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => comIp(d.ip || 'indisponível')).catch(() => comIp('indisponível'));
+                beat();
+                setInterval(beat, 10000);
+                window.addEventListener('pagehide', () => { const p = get('ciee_presenca', {}); delete p[sid]; put('ciee_presenca', p); });
+            } catch (e) {}
+        }
+        
+
+        // =====================================================================
+        // INTEGRAÇÃO COM O PAINEL ADMIN (dados em localStorage; sem dados = conteúdo padrão da página)
+        // =====================================================================
+        const _ls = (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } };
+        const _esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const _seguro = u => /^https?:\/\//i.test(u || '') ? u : '';
+        const _fmt = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('pt-BR') : '';
+        const _vazio = t => `<div style="grid-column:1/-1;text-align:center;padding:30px;border:2px dashed var(--border-color);border-radius:20px;font-weight:800;color:var(--text-muted)">${t}</div>`;
+
+        // Abre PDF enviado pelo admin (data URL) ou link externo
+        function abrirConteudo(origem, tipo, valor, nome) {
+            if (tipo === 'Arquivo PDF' && valor) {
+                try {
+                    const b = atob(valor.split(',')[1]), arr = new Uint8Array(b.length);
+                    for (let i = 0; i < b.length; i++) arr[i] = b.charCodeAt(i);
+                    const url = URL.createObjectURL(new Blob([arr], { type: 'application/pdf' }));
+                    window.open(url, '_blank');
+                    return;
+                } catch (e) { alert('Não foi possível abrir o arquivo.'); return; }
+            }
+            const u = _seguro(valor);
+            if (u) window.open(u, '_blank', 'noopener'); else alert('Conteúdo indisponível no momento.');
+        }
+        const _guardaConteudo = {};   // evita colocar data URLs enormes dentro do HTML
+        function abrirItem(chave) { const c = _guardaConteudo[chave]; if (c) abrirConteudo('', c.tipo, c.valor); }
+
+        function renderMural() {
+            const hoje = new Date().toISOString().slice(0, 10), mes = new Date().getMonth();
+            const us = (_ls('ciee_users') || []).filter(u => u.nasc && new Date(u.nasc + 'T00:00:00').getMonth() === mes)
+                .sort((a, b) => new Date(a.nasc + 'T00:00:00').getDate() - new Date(b.nasc + 'T00:00:00').getDate());
+            const li = us.map(u => { const d = new Date(u.nasc + 'T00:00:00'); return `<li>🎈 ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')} - ${_esc(u.nome)}<small>${_esc(u.periodo || '')}${u.cidade ? ' • ' + _esc(u.cidade) : ''}</small></li>`; });
+            const ul = $('aniv-list'), view = $('aniv-view');
+            if (!li.length) { ul.style.animation = 'none'; ul.style.position = 'static'; ul.innerHTML = '<li>Nenhum aniversariante cadastrado neste mês.</li>'; }
+            else {
+                ul.style.position = ''; ul.style.animation = '';
+                ul.innerHTML = li.join('');
+                // rolagem contínua de baixo para cima; velocidade proporcional ao tamanho da lista
+                ul.style.setProperty('--aniv-dur', Math.max(12, li.length * 3 + 8) + 's');
+            }
+            const posts = _ls('ciee_mural');
+            if (posts) {
+                $('mural-posts').innerHTML = posts.filter(p => !p.ate || p.ate >= hoje)
+                    .sort((a, b) => (b.fixado === 'Sim') - (a.fixado === 'Sim') || (b.criadoEm || 0) - (a.criadoEm || 0))
+                    .map(p => `<div class="generic-card" ${p.fixado === 'Sim' ? 'style="border-color:var(--theme-primary)"' : ''}>
+                        <span class="badge-info">${p.fixado === 'Sim' ? '📌 ' : ''}${_esc(p.tipo)}</span>
+                        <h3 class="card-title">${_esc(p.titulo)}</h3>
+                        <p class="card-subtitle" style="white-space:pre-line">${_esc(p.texto)}</p>
+                        <small style="color:var(--text-muted);font-weight:700">${_esc(p.autor || '')}${p.criadoEm > 1e6 ? ' • ' + new Date(p.criadoEm).toLocaleDateString('pt-BR') : ''}</small></div>`).join('') || _vazio('Nenhum aviso no momento.');
+            }
+        }
+
+        // Acervo físico: livros com empréstimo (dados do admin; sem dados = exemplos da página)
+        const _demoBooks = books.slice();
+        function carregarFisicos() {
+            const ac = _ls('ciee_acervo');
+            if (!ac) { books = _demoBooks; return; }
+            const emp = _ls('ciee_emprestimos') || [], meu = String(sessionData.email || '').toLowerCase();
+            books = ac.map(b => {
+                const e = emp.find(x => x.codigo === b.codigo);
+                const o = { id: b.codigo, title: b.titulo, author: b.autor, cat: b.categoria, status: 'disp', desc: b.desc || [b.editora, b.ano, b.local && '📍 ' + b.local].filter(Boolean).join(' • ') || 'Disponível para empréstimo.' };
+                if (e) {
+                    if (meu && String(e.email || '').toLowerCase() === meu) {
+                        const [d, m, a] = String(e.devolucao || '').split('/').map(Number);
+                        const dias = a ? Math.ceil((new Date(a, m - 1, d) - new Date()) / 86400000) : 30;
+                        Object.assign(o, { status: 'emp_eu', daysLeft: Math.max(0, dias), desc: 'Emprestado para você.' });
+                    } else Object.assign(o, { status: 'emp_outro', desc: 'Emprestado para outro usuário.' });
+                }
+                return o;
+            });
+        }
+
+        function renderCategoriasSelect() {
+            const cats = _ls('ciee_categorias'); if (!cats) return;
+            ['category-select', 'dig-cat'].forEach(id => {
+                const sel = document.getElementById(id), v = sel.value || 'Todos';
+                sel.innerHTML = '<option value="Todos">📚 Todas as Categorias</option>' + cats.map(c => `<option value="${_esc(c.prefixo)}">${_esc(c.prefixo)} - ${_esc(c.nome)}</option>`).join('');
+                sel.value = [...sel.options].some(o => o.value === v) ? v : 'Todos';
+            });
+        }
+
+        // Acervo digital: cards com PDF/link (sem legenda de empréstimo nem disponibilidade)
+        function renderDigitais() {
+            const lista = _ls('ciee_livros_digitais') || [];
+            const q = ($('dig-busca').value || '').toLowerCase(), cat = $('dig-cat').value || 'Todos';
+            const f = lista.filter(b => (cat === 'Todos' || b.categoria === cat) && [b.titulo, b.autor, b.categoria].some(x => String(x || '').toLowerCase().includes(q)));
+            $('digital-container').innerHTML = f.length ? f.map(b => { _guardaConteudo['d' + b._id] = { tipo: b.tipoFonte, valor: b.tipoFonte === 'Arquivo PDF' ? b.arquivo : b.url };
+                return `<div class="book-card"><div>
+                    <span class="book-code">${_esc(b.categoria)}</span>
+                    <h3 class="book-title">${_esc(b.titulo)}</h3><p class="book-author">${_esc(b.autor)}</p>
+                    ${b.desc ? `<p style="font-size:0.85rem;color:var(--text-muted);margin-top:10px;">${_esc(b.desc)}</p>` : ''}</div>
+                    <div style="display:flex;gap:8px;margin-top:15px;"><button class="btn-action btn-reserve" onclick="abrirItem('d${_esc(b._id)}')">${b.tipoFonte === 'Arquivo PDF' ? '⬇️ Baixar PDF' : '🔗 Abrir link'}</button></div></div>`; }).join('')
+                : _vazio('Nenhum livro digital encontrado.');
+        }
+
+        // Menu Acervo: links extras gerenciados no admin
+        function renderMenuAcervo() {
+            const l = _ls('ciee_menu_acervo'); if (!l) return;
+            const m = $('menu-acervo');
+            m.querySelectorAll('.extra-acervo').forEach(a => a.remove());
+            l.forEach(x => { if (!_seguro(x.link)) return; const a = document.createElement('a'); a.className = 'dropdown-item extra-acervo'; a.target = '_blank'; a.rel = 'noopener'; a.href = x.link; a.textContent = x.titulo + ' ↗'; m.appendChild(a); });
+        }
+
+        function renderCalendario() {
+            const ev = _ls('ciee_calendario') || [];
+            const OUTLOOK_PADRAO = 'https://outlook.office365.com/owa/calendar/c96206fd55374c17a589d14fd674a745@cieesc.org.br/20fe2a726f2144cc915440895f4bfae82551157630324397568/calendar.html';
+            const url = (_ls('ciee_sistema') || {}).outlookUrl || OUTLOOK_PADRAO;
+            const hoje = new Date().toISOString().slice(0, 10);
+            const fut = ev.filter(e => e.data >= hoje).sort((a, b) => (a.data + (a.hi || '')).localeCompare(b.data + (b.hi || '')));
+            const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            let html = '', atual = '';
+            fut.forEach(e => {
+                const d = new Date(e.data + 'T00:00:00'), m = `${meses[d.getMonth()]} ${d.getFullYear()}`;
+                if (m !== atual) { if (atual) html += '</div>'; html += `<div class="month-header">${m}</div><div class="schedule-grid">`; atual = m; }
+                html += `<div class="schedule-card"><div><span class="book-code" style="margin-bottom:10px;">${_esc(e.categoria)}</span>
+                    <h3 class="card-title">${_esc(e.titulo)}</h3>
+                    <p class="card-subtitle">Data: ${_fmt(e.data).slice(0, 5)} • ${e.hi ? _esc(e.hi) + (e.hf ? ' às ' + _esc(e.hf) : '') : 'Dia todo'}${e.local ? ' • 📍 ' + _esc(e.local) : ''}</p>
+                    ${e.desc ? `<p class="card-subtitle" style="margin-top:6px">${_esc(e.desc)}</p>` : ''}</div></div>`;
+            });
+            if (atual) html += '</div>';
+            const sec = document.getElementById('tab-cronograma');
+            const frame = _seguro(url) ? `<iframe class="cal-frame" src="${_esc(url)}" title="Calendário compartilhado do Outlook" loading="lazy" referrerpolicy="no-referrer"></iframe>` : '<!-- iframe do calendário do Outlook: informe o link em Admin › Sistema › Calendário Outlook -->';
+            sec.innerHTML = `<h2 class="section-title">Calendário</h2><p class="section-desc">Fique por dentro dos eventos, atividades e feriados.</p>` + frame + (_seguro(url) ? '' : (html || _vazio('Nenhum evento programado por enquanto.')));
+        }
+
+        function renderGuias() {
+            const g = _ls('ciee_guias'); if (!g) return;
+            document.querySelector('#tab-guias .mural-grid').innerHTML = g.length ? g.map(x => { _guardaConteudo['g' + x._id] = { tipo: x.tipoFonte, valor: x.tipoFonte === 'Arquivo PDF' ? x.arquivo : x.url };
+                return `<div class="generic-card" style="align-items:center;text-align:center;"><h3 class="card-title" style="margin-bottom:${x.desc ? 6 : 15}px;">${_esc(x.titulo)}</h3>
+                    ${x.desc ? `<p class="card-subtitle" style="margin-bottom:15px">${_esc(x.desc)}</p>` : ''}
+                    <button class="btn-action btn-reserve" onclick="abrirItem('g${_esc(x._id)}')">${x.tipoFonte === 'Arquivo PDF' ? '⬇️ Baixar PDF' : '🔗 Abrir'}</button></div>`; }).join('')
+                : _vazio('Nenhum guia disponível no momento.');
+        }
+
+        function renderEquipe() {
+            const o = _ls('ciee_orientadores'), m = _ls('ciee_monitores'), a = _ls('ciee_administrativo'), t = _ls('ciee_turmas');
+            const cidade = (sessionData && sessionData.cidade) || '';
+            const ord = (x, y) => (y.cidade === cidade) - (x.cidade === cidade);
+            const nn = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+            const codigos = _ls('ciee_codigos_acesso') || [];
+            const fotoDe = nome => { const c = codigos.find(x => x.foto && nn(x.perfil) === nn(nome)); return c ? c.foto : ''; };
+            const card = (p, ico) => `<div class="team-card" style="align-items:center;text-align:center;">${fotoDe(p.nome) ? `<img src="${fotoDe(p.nome)}" alt="" style="width:84px;height:84px;object-fit:cover;border-radius:50%;border:3px solid var(--theme-primary)">` : `<div style="font-size:3rem;">${ico}</div>`}
+                <h3 class="card-title">${_esc(p.nome)}</h3><p class="card-subtitle">${_esc(p.cargo)} • ${_esc(p.cidade)}</p>
+                ${p.email ? `<a class="contact-line" href="mailto:${_esc(p.email)}">📧 ${_esc(p.email)}</a>` : '<span class="contact-line" style="opacity:.7">📧 E-mail não informado</span>'}
+                ${p.fone ? `<p style="font-size:.85rem;color:var(--text-muted);font-weight:700">📱 ${_esc(p.fone)}</p>` : ''}</div>`;
+            if (o) document.getElementById('team-container').innerHTML = o.length ? [...o].sort(ord).map(p => card(p, '👨‍🏫')).join('') : _vazio('Nenhum orientador cadastrado.');
+            if (m) document.getElementById('monitoria-container').innerHTML = m.length ? [...m].sort(ord).map(p => card(p, '🤝')).join('') : _vazio('Nenhum monitor cadastrado.');
+            if (a) document.getElementById('sectors-container').innerHTML = a.map(s => `<div class="sector-card"><div>
+                <strong style="color:var(--theme-primary);">${_esc(s.setor)}</strong><div style="font-weight:700;font-size:0.95rem;">${_esc(s.nome)}</div>
+                ${s.fone ? `<div style="font-size:.85rem;color:var(--text-muted);font-weight:700">📱 ${_esc(s.fone)}</div>` : ''}</div>
+                <a href="mailto:${_esc(s.email)}" style="color:var(--theme-primary);font-weight:800;text-decoration:none;">📧 E-mail</a></div>`).join('') || _vazio('Nenhum contato cadastrado.');
+            if (t) document.getElementById('turmas-container').innerHTML = [...t].sort(ord).map(x => `<div class="turma-card"><span class="book-code">${_esc(x.codId)}</span>
+                <h4 class="card-title" style="font-size:1.1rem;margin-top:5px;">${_esc(x.diaPeriodo)}</h4>
+                <p class="card-subtitle" style="margin-bottom:8px;">Responsável: ${_esc(x.responsavel)}</p>
+                <p style="font-size:0.85rem;color:var(--text-muted);">📍 ${_esc(x.cidade)}</p></div>`).join('') || _vazio('Nenhuma turma cadastrada.');
+        }
+
+        function renderFaq() {
+            const f = _ls('ciee_faq'); if (!f) return;
+            const sec = document.getElementById('tab-faq');
+            sec.innerHTML = `<h2 class="section-title">Dúvidas Frequentes (FAQ)</h2><p class="section-desc">Respostas rápidas para as principais dúvidas.</p>` +
+                ([...f].sort((a, b) => (a.ordem || 0) - (b.ordem || 0)).map(x => `<div class="generic-card" style="margin-bottom:14px"><h3 class="card-title">${_esc(x.pergunta)}</h3>
+                    <p class="card-subtitle" style="margin:0;white-space:pre-line">${_esc(x.resposta)}</p></div>`).join('') || _vazio('Nenhuma pergunta cadastrada.'));
+        }
+
+        function renderArtes() {
+            const ar = _ls('ciee_artes'); if (!ar) return;
+            document.querySelector('#tab-artes .mural-grid').innerHTML = ar.map(x => `<div class="generic-card" style="text-align:center;">
+                ${x.imagem ? `<img src="${x.imagem}" alt="" style="width:100%;max-height:180px;object-fit:cover;border-radius:14px;margin-bottom:10px">` : ''}
+                <h3 class="card-title">${_esc(x.titulo)}</h3><p class="card-subtitle">${_esc(x.desc)}</p>
+                ${_seguro(x.link) ? `<button class="btn-action btn-reserve" onclick="window.open('${_esc(_seguro(x.link))}','_blank','noopener')">${_esc(x.btn || 'Abrir')}</button>` : ''}</div>`).join('') || _vazio('Nenhum conteúdo por enquanto.');
+        }
+
+        function renderAchados() {
+            const ob = _ls('ciee_objetos_achados'); if (!ob) return;
+            document.getElementById('lost-found-container').innerHTML = ob.length ? ob.map(x => `<div class="lost-found-card"><div>
+                ${x.imagem ? `<img src="${x.imagem}" alt="" style="width:100%;height:140px;object-fit:cover;border-radius:14px;margin-bottom:10px">` : ''}
+                <h3 class="card-title" style="text-align:center;">${_esc(x.nome)}</h3><div style="margin:12px 0;">
+                <div class="badge-info">Encontrado em: ${_esc(x.data)}${x.periodo ? ' (' + _esc(x.periodo) + ')' : ''}</div>
+                <div class="badge-info">Local: ${_esc(x.cidade)}</div></div></div></div>`).join('') : _vazio('Nenhum objeto registrado no momento.');
+        }
+
+        const WIFI_PAD = { titulo: 'Conecta Wi-Fi CIEE', ssid: 'CIEE Alunos', senha: 'ciee#aprendizagem2023', tipo: 'WPA', texto: 'Aponte a câmera do seu celular para o QR Code abaixo para se conectar automaticamente:' };
+        function wifiAtualPlay() { return Object.assign({}, WIFI_PAD, _ls('ciee_wifi') || {}); }
+        function renderWifi() {
+            const w = wifiAtualPlay();
+            const esc = s => String(s).replace(/([\\;,:"])/g, '\\$1');
+            const qr = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`WIFI:S:${esc(w.ssid)};T:${w.tipo};P:${esc(w.senha)};;`)}`;
+            const box = document.querySelector('#tab-wifi > div');
+            box.querySelector('h2').textContent = w.titulo; box.querySelector('p').textContent = w.texto;
+            box.querySelector('img').src = qr; box.querySelector('code').textContent = w.ssid;
+            const bt = box.querySelector('button'); bt.style.display = w.tipo === 'nopass' ? 'none' : '';
+        }
+        copyWifiPassword = function () {
+            const w = wifiAtualPlay();
+            navigator.clipboard.writeText(w.senha).then(() => alert('Senha copiada com sucesso!'), () => alert('Senha do Wi-Fi: ' + w.senha));
+        };
+
+        function renderIntegrado() {
+            renderMural(); carregarFisicos(); renderCategoriasSelect(); applyFilters(); renderDigitais(); renderMenuAcervo(); renderCalendario(); renderGuias();
+            renderEquipe(); renderFaq(); renderArtes(); renderAchados(); renderWifi();
+        }
+        renderIntegrado();
+        window.addEventListener('storage', renderIntegrado);       // atualiza ao vivo quando o admin altera
+        cieeTrack(sessionData, 'PLAY');
+    </script>
+<script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
+</body>
+</html>
