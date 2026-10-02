@@ -194,6 +194,20 @@ body{font-size:1rem}
     content: ""; display: inline-block; width: 1.35em; height: 1.35em; margin-right: .4em; vertical-align: -0.28em;
     background: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id=%22g%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%3E%3Canimate%20attributeName=%22stop-color%22%20values=%22%23d63384;%236f42c1;%230056b3;%23d63384%22%20dur=%226s%22%20repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop%20offset=%221%22%3E%3Canimate%20attributeName=%22stop-color%22%20values=%22%23ff8fab;%23a78bfa;%2300b4d8;%23ff8fab%22%20dur=%226s%22%20repeatCount=%22indefinite%22/%3E%3C/stop%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon%20points=%2227,9%2073,9%2097,50%2073,91%2027,91%203,50%22%20fill=%22url(%23g)%22%20stroke=%22%23fff%22%20stroke-width=%223%22%20stroke-linejoin=%22round%22/%3E%3Cpolygon%20points=%2242,32%2042,68%2071,50%22%20fill=%22%23fff%22/%3E%3C/svg%3E") center / contain no-repeat;
 }
+
+/* Rodapé: no celular, textos curtos em 2 linhas */
+.admin-footer .f-line{display:block}
+.admin-footer .f-short{display:none}
+@media (max-width:820px){
+  .admin-footer .f-long{display:none}
+  .admin-footer .f-short{display:inline}
+  .admin-footer{font-size:.72rem;padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));margin-top:6px;line-height:1.4;letter-spacing:.2px}
+}
+
+/* Corrige o botão de tema "espelhado" que aparecia através do cartão virado (Safari/iPhone) */
+.card-front, .card-front *, .front-tools, .front-tools * { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.card-front { transition: visibility 0s linear .4s; }
+.scene.show-login .card-front, .scene.show-register .card-front { visibility: hidden; pointer-events: none; }
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -483,7 +497,10 @@ body{font-size:1rem}
   </div>
 </div>
 
-<footer class="admin-footer">Desenvolvido por Fabrício • Versão <span id="app-version">0.1</span> <br>Todos os direitos reservados ao CIEESC ▶︎ PLAY &copy; <span id="current-year"></span></footer>
+<footer class="admin-footer">
+  <span class="f-line"><span class="f-long">Desenvolvido por Fabrício • Versão </span><span class="f-short">Por Fabrício • v</span><span id="app-version">0.1</span></span>
+  <span class="f-line"><span class="f-long">Todos os direitos reservados ao CIEESC ▶︎ PLAY </span><span class="f-short">CIEESC ▶︎ PLAY </span>&copy; <span id="current-year"></span></span>
+</footer>
 
 <script>
 // "Manter conectado": quem já entrou vai direto para o playing.html
@@ -757,6 +774,7 @@ function flipTo(side){
   currentFace = side;
   if (side === 'login'){ scene.dataset.side = 'login'; scene.classList.add('show-login'); loginReset(); }
   else if (side === 'register'){ scene.dataset.side = 'register'; scene.classList.add('show-register'); photoTimeDone = false; nextPage(1, true); }
+  else { scene.dataset.side = ''; }   // voltou para a tela inicial
   syncHeight();
 }
 
