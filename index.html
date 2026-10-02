@@ -212,6 +212,26 @@ body.flipping, body.flipping .hex-shape { animation-play-state: paused; }   /* l
 /* O conteúdo da tela inicial some logo no começo do giro (evita o botão "espelhado" no Safari) e volta no fim */
 .card-front > * { -webkit-backface-visibility: hidden; backface-visibility: hidden; opacity: 1; transition: opacity .2s ease .4s; }
 .scene.show-login .card-front > *, .scene.show-register .card-front > * { opacity: 0; transition: opacity .12s ease 0s; }
+
+/* ===== Tela de carregamento animada: hexágonos cruzam a tela, CIEESC → ▶ gigante encolhe → PLAY ===== */
+#splash-screen .sh{position:fixed;z-index:1;pointer-events:none;opacity:0}
+.sh1{width:120px;height:104px;top:8%;left:4%;--sx:-70vw;--sy:30vh;--mx:60vw;--my:10vh}
+.sh2{width:140px;height:121px;top:12%;right:5%;--sx:70vw;--sy:-10vh;--mx:-60vw;--my:25vh}
+.sh3{width:90px;height:78px;bottom:10%;left:5%;--sx:-70vw;--sy:-20vh;--mx:55vw;--my:-25vh}
+.sh4{width:120px;height:104px;bottom:12%;right:6%;--sx:70vw;--sy:20vh;--mx:-55vw;--my:-10vh}
+#splash-screen .sh{animation:hexIn 2.8s cubic-bezier(.3,.7,.25,1) both,floatHex 12s ease-in-out 2.8s infinite alternate}
+#splash-screen .sh2{animation-delay:.15s,2.95s}#splash-screen .sh3{animation-delay:.3s,3.1s}#splash-screen .sh4{animation-delay:.45s,3.25s}
+@keyframes hexIn{0%{opacity:0;transform:translate(var(--sx),var(--sy)) rotate(-160deg) scale(.4)}20%{opacity:.45}62%{opacity:.45;transform:translate(var(--mx),var(--my)) rotate(60deg) scale(1.1)}100%{opacity:.45;transform:translate(0,0) rotate(0) scale(1)}}
+#splash-screen h1.logo{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:.3em;font-family:'Fredoka',cursive;font-weight:600;font-size:clamp(2rem,10vw,3.2rem);line-height:1;animation:none;margin:0}
+#splash-screen .w{opacity:0}
+#splash-screen .ic{width:.85em;height:.85em;fill:#fff;opacity:0;position:relative;z-index:3;filter:drop-shadow(0 4px 10px rgba(0,0,0,.25))}
+#splash-screen .w1{animation:rise .8s ease 1s both}
+#splash-screen .ic{animation:shrink 1.4s cubic-bezier(.5,0,.2,1) 2s both}
+#splash-screen .w3{animation:rise .8s ease 3.5s both}
+#splash-screen .sub{position:relative;z-index:2;margin-top:10px;font-weight:700;opacity:0;animation:rise .8s ease 4.3s both}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes shrink{0%{opacity:0;transform:scale(22)}15%{opacity:.5}100%{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){#splash-screen .sh,#splash-screen .w,#splash-screen .ic,#splash-screen .sub{animation-duration:.01s!important;animation-delay:0s!important}}
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -225,12 +245,12 @@ body.flipping, body.flipping .hex-shape { animation-play-state: paused; }   /* l
 <body>
 
 <div id="splash-screen">
-  <svg class="hex-shape hex1" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.6)" stroke-width="3.5"/></svg>
-  <svg class="hex-shape hex2" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/></svg>
-  <svg class="hex-shape hex3" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.5)" stroke-width="3"/></svg>
-  <svg class="hex-shape hex4" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.6)" stroke-width="3.5"/></svg>
-  <h1>CIEESC ▶︎ PLAY</h1>
-  <p style="font-weight:700;margin-top:5px;opacity:.9">Portal da Aprendizagem</p>
+  <svg class="sh sh1" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.6)" stroke-width="3.5"/></svg>
+  <svg class="sh sh2" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.6)" stroke-width="3.5"/></svg>
+  <svg class="sh sh3" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.6)" stroke-width="3.5"/></svg>
+  <svg class="sh sh4" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.6)" stroke-width="3.5"/></svg>
+  <h1 class="logo" aria-label="CIEESC PLAY"><span class="w w1">CIEESC</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5v17a1 1 0 0 0 1.5.86l14-8.5a1 1 0 0 0 0-1.72l-14-8.5A1 1 0 0 0 6 3.5z"/></svg><span class="w w3">PLAY</span></h1>
+  <p class="sub">Portal da Aprendizagem</p>
 </div>
 
 <svg class="hex-shape hex1" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.6)" stroke-width="3.5"/></svg>
@@ -766,11 +786,13 @@ document.addEventListener('DOMContentLoaded', syncHeight);
 // 3. Splash
 window.addEventListener('load', () => {
   applyRandomColors(); syncHeight();
+  // animação completa só na 1ª vez de cada sessão; depois, entrada rápida
+  let jaVisto = false; try { jaVisto = !!sessionStorage.getItem('ciee_splash'); sessionStorage.setItem('ciee_splash', '1'); } catch (e) {}
   setTimeout(() => {
     const s = document.getElementById('splash-screen');
     s.style.opacity = '0'; s.style.transform = 'scale(1.05)';
     setTimeout(() => s.style.display = 'none', 600);
-  }, 1800);
+  }, jaVisto ? 500 : 5400);
 });
 
 // 4. Virada 3D: Login → esquerda | 1º Acesso → direita
