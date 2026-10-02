@@ -1,6 +1,8 @@
-ÍCONES
-- icons/logo-animado.svg : logo com cores alternando (rosa, roxo, azul). Usado no navegador e no cabeçalho das páginas.
-- icons/icon-azul|roxo|rosa-192/512.png, maskable-*, apple-touch-*.png : versões fixas do ícone do aplicativo.
-- O ícone que fica na tela inicial do celular é uma imagem fixa (não existe ícone animado em app instalado).
-  Para trocar a cor dele: copie os arquivos da cor escolhida por cima de icon-192.png, icon-512.png,
-  maskable-512.png e apple-touch-icon.png, e depois remova e instale o app de novo no celular.
+ÍCONE DO APP (a imagem enviada)
+- icons/icon-192.png e icon-512.png : Android (ícone normal, cantos arredondados)
+- icons/maskable-512.png            : Android (ícone adaptável, o sistema recorta em círculo/quadrado)
+- icons/apple-touch-icon.png (180)  : iPhone/iPad (o iOS arredonda sozinho)
+- icons/favicon-48.png e favicon-512.png : aba do navegador
+- icons/logo-animado.svg : logo animado usado só dentro das páginas.
+
+Depois de enviar ao GitHub, remova o app do celular (ou o favorito) e adicione de novo para o ícone novo aparecer.

@@ -1,7 +1,7 @@
 // Troque o número da versão a cada atualização dos arquivos para o celular baixar a nova versão.
-const VERSAO = 'ciee-play-v5';
+const VERSAO = 'ciee-play-v6';
 const ARQUIVOS = ['./', './index.html', './playing.html', './admin.html', './manifest.json',
-  './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
+  './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png', './icons/maskable-512.png', './icons/favicon-48.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSAO).then(c => c.addAll(ARQUIVOS)));
