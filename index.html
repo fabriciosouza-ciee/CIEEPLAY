@@ -209,6 +209,9 @@ body{font-size:1rem}
 .scene.show-login .card-front, .scene.show-register .card-front { visibility: hidden; pointer-events: none; transition: visibility 0s linear .5s; }
 .card-3d { will-change: transform; transition: transform .75s cubic-bezier(.45,.05,.25,1), height .45s ease; }
 body.flipping, body.flipping .hex-shape { animation-play-state: paused; }   /* libera a GPU durante o giro */
+/* O conteúdo da tela inicial some logo no começo do giro (evita o botão "espelhado" no Safari) e volta no fim */
+.card-front > * { -webkit-backface-visibility: hidden; backface-visibility: hidden; opacity: 1; transition: opacity .2s ease .4s; }
+.scene.show-login .card-front > *, .scene.show-register .card-front > * { opacity: 0; transition: opacity .12s ease 0s; }
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
