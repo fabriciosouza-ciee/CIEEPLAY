@@ -15,8 +15,8 @@ body{background:var(--bg-gradient);background-size:400% 400%;animation:gradientB
 .hex-shape{position:fixed;z-index:1;pointer-events:none;animation:floatHex 12s infinite alternate ease-in-out;opacity:.45}
 .hex1{width:120px;height:104px;top:8%;left:4%}.hex2{width:140px;height:121px;top:12%;right:5%}.hex3{width:90px;height:78px;bottom:10%;left:5%}.hex4{width:120px;height:104px;bottom:12%;right:6%}
 @keyframes floatHex{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(-20px) rotate(5deg)}}
-#splash-screen{position:fixed;inset:0;background:var(--bg-gradient);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;transition:opacity .6s ease,transform .6s ease;color:var(--white);padding:20px}
-#splash-screen h1{font-family:'Fredoka',cursive;font-size:2.8rem;animation:bounce 1.2s infinite alternate;text-align:center}
+#splash-screen{position:fixed;inset:0;background:var(--bg-gradient);background-size:400% 400%;animation:gradientBG 15s ease infinite;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;transition:opacity .6s ease,transform .6s ease;color:var(--white);padding:20px}
+#splash-screen h1{font-family:'Fredoka',cursive;font-size:2.8rem;animation:bounce 1.2s infinite alternate;text-align:center;position:relative;z-index:2}#splash-screen p{position:relative;z-index:2}
 .splash-logo-container{background:rgba(255,255,255,.95);padding:14px 28px;border-radius:24px;margin-bottom:20px;box-shadow:0 10px 25px rgba(0,0,0,.15)}
 .splash-logo-container img{max-height:55px;display:block}
 @keyframes bounce{0%{transform:translateY(0)}100%{transform:translateY(-10px)}}
@@ -190,7 +190,7 @@ body{font-size:1rem}
 .login-msg,.terms-hint,.mail-status,.strength-label,.pass-msg,.pass-legend li{font-size:.85rem}
 .admin-footer{font-size:.85rem}
 /* ===== Logo: play dentro de hexágono com cores que alternam (rosa → roxo → azul) ===== */
-.brand-logo::before, .admin-brand::before, .card-front h2::before, #splash-screen h1::before {
+.brand-logo::before, .admin-brand::before, .card-front h2::before {
     content: ""; display: inline-block; width: 1.35em; height: 1.35em; margin-right: .4em; vertical-align: -0.28em;
     background: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id=%22g%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%3E%3Canimate%20attributeName=%22stop-color%22%20values=%22%23d63384;%236f42c1;%230056b3;%23d63384%22%20dur=%226s%22%20repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop%20offset=%221%22%3E%3Canimate%20attributeName=%22stop-color%22%20values=%22%23ff8fab;%23a78bfa;%2300b4d8;%23ff8fab%22%20dur=%226s%22%20repeatCount=%22indefinite%22/%3E%3C/stop%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon%20points=%2227,9%2073,9%2097,50%2073,91%2027,91%203,50%22%20fill=%22url(%23g)%22%20stroke=%22%23fff%22%20stroke-width=%223%22%20stroke-linejoin=%22round%22/%3E%3Cpolygon%20points=%2242,32%2042,68%2071,50%22%20fill=%22%23fff%22/%3E%3C/svg%3E") center / contain no-repeat;
 }
@@ -225,7 +225,10 @@ body.flipping, body.flipping .hex-shape { animation-play-state: paused; }   /* l
 <body>
 
 <div id="splash-screen">
-  <div class="splash-logo-container"><img src="https://centralcieesc.org.br/SOL/Images/cieeSC2018.png" alt="Logo CIEE SC"></div>
+  <svg class="hex-shape hex1" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.6)" stroke-width="3.5"/></svg>
+  <svg class="hex-shape hex2" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/></svg>
+  <svg class="hex-shape hex3" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.5)" stroke-width="3"/></svg>
+  <svg class="hex-shape hex4" viewBox="0 0 100 86.6"><polygon points="25,2 75,2 98,43.3 75,84.6 25,84.6 2,43.3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.6)" stroke-width="3.5"/></svg>
   <h1>CIEESC ▶︎ PLAY</h1>
   <p style="font-weight:700;margin-top:5px;opacity:.9">Portal da Aprendizagem</p>
 </div>
