@@ -204,10 +204,11 @@ body{font-size:1rem}
   .admin-footer{font-size:.72rem;padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));margin-top:6px;line-height:1.4;letter-spacing:.2px}
 }
 
-/* Corrige o botão de tema "espelhado" que aparecia através do cartão virado (Safari/iPhone) */
-.card-front, .card-front *, .front-tools, .front-tools * { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
-.card-front { transition: visibility 0s linear .4s; }
-.scene.show-login .card-front, .scene.show-register .card-front { visibility: hidden; pointer-events: none; }
+/* Giro suave do cartão + correção do botão espelhado no Safari/iPhone */
+.card-front { -webkit-backface-visibility: hidden; backface-visibility: hidden; transition: none; }
+.scene.show-login .card-front, .scene.show-register .card-front { visibility: hidden; pointer-events: none; transition: visibility 0s linear .5s; }
+.card-3d { will-change: transform; transition: transform .75s cubic-bezier(.45,.05,.25,1), height .45s ease; }
+body.flipping, body.flipping .hex-shape { animation-play-state: paused; }   /* libera a GPU durante o giro */
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -769,6 +770,7 @@ window.addEventListener('load', () => {
 // 4. Virada 3D: Login → esquerda | 1º Acesso → direita
 function flipTo(side){
   if (MANUT && side === 'register') return;   // 1º acesso indisponível em manutenção
+  document.body.classList.add('flipping'); clearTimeout(window._flT); window._flT = setTimeout(() => document.body.classList.remove('flipping'), 950);
   applyRandomColors();
   scene.classList.remove('show-login','show-register');
   currentFace = side;
@@ -1386,6 +1388,7 @@ document.addEventListener('keydown', e => {
   }
 });
 </script>
+<script src="atualiza.js" defer></script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
