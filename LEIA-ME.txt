@@ -1,8 +1,3 @@
-ÍCONE DO APP (a imagem enviada)
-- icons/icon-192.png e icon-512.png : Android (ícone normal, cantos arredondados)
-- icons/maskable-512.png            : Android (ícone adaptável, o sistema recorta em círculo/quadrado)
-- icons/apple-touch-icon.png (180)  : iPhone/iPad (o iOS arredonda sozinho)
-- icons/favicon-48.png e favicon-512.png : aba do navegador
-- icons/logo-animado.svg : logo animado usado só dentro das páginas.
-
-Depois de enviar ao GitHub, remova o app do celular (ou o favorito) e adicione de novo para o ícone novo aparecer.
+1) Envie TODOS os arquivos soltos para a raiz do repositório (Add file > Upload files > Commit).
+2) Espere 2 minutos e abra no iPhone: .../CIEESC_PLAY/teste-icone.html  (tudo deve estar "OK"/"SIM").
+3) Apague o atalho antigo, feche o Safari, abra o site no SAFARI e use Compartilhar > Adicionar à Tela de Início.

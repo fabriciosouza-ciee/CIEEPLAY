@@ -1,7 +1,7 @@
 // Troque o número da versão a cada atualização dos arquivos para o celular baixar a nova versão.
-const VERSAO = 'ciee-play-v6';
+const VERSAO = 'ciee-play-v7';
 const ARQUIVOS = ['./', './index.html', './playing.html', './admin.html', './manifest.json',
-  './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png', './icons/maskable-512.png', './icons/favicon-48.png'];
+  './icon-192.png', './icon-512.png', './maskable-512.png', './icone-ios-v2.png', './favicon-48.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSAO).then(c => c.addAll(ARQUIVOS)));
@@ -18,7 +18,7 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;           // fontes, Outlook etc. seguem direto pela rede
   e.respondWith(
-    fetch(req).then(res => {
+    fetch(req, { cache: 'no-store' }).then(res => {
       const copia = res.clone();
       caches.open(VERSAO).then(c => c.put(req, copia));
       return res;
