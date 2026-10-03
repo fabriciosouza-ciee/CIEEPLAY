@@ -3,22 +3,28 @@
 const PUSH_APP_ID = 'f5587a67-7481-4538-bfd2-7746b9e1038a';
 
 (function () {
-  if (!PUSH_APP_ID || PUSH_APP_ID.startsWith('COLE-AQUI')) return;      // ainda não configurado
+  if (!PUSH_APP_ID || PUSH_APP_ID.startsWith('COLE-AQUI')) return;      // ainda não configurado (não altere esta linha)
 
   const base = location.pathname.replace(/[^/]*$/, '');                  // ex.: /CIEESC_PLAY/
   window.OneSignalDeferred = window.OneSignalDeferred || [];
+  window.__push = { scriptCarregou: null, init: null, erro: '' };
   const s = document.createElement('script');
   s.src = 'https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js'; s.defer = true;
+  s.onload = () => { window.__push.scriptCarregou = true; };
+  s.onerror = () => { window.__push.scriptCarregou = false; window.__push.erro = 'Não foi possível baixar o script do OneSignal (internet ou bloqueador de anúncios).'; };
   document.head.appendChild(s);
 
   OneSignalDeferred.push(async function (OneSignal) {
-    await OneSignal.init({
-      appId: PUSH_APP_ID,
-      serviceWorkerPath: 'sw.js',                       // usa o mesmo service worker do app
-      serviceWorkerParam: { scope: base },
-      allowLocalhostAsSecureOrigin: true,
-      notifyButton: { enable: false }
-    });
+    try {
+      await OneSignal.init({
+        appId: PUSH_APP_ID,
+        serviceWorkerPath: 'sw.js',                       // usa o mesmo service worker do app
+        serviceWorkerParam: { scope: base },
+        allowLocalhostAsSecureOrigin: true,
+        notifyButton: { enable: false }
+      });
+      window.__push.init = true;
+    } catch (e) { window.__push.init = false; window.__push.erro = String((e && e.message) || e); console.error('OneSignal init:', e); return; }
     try {                                               // etiquetas para segmentar (opcional)
       const ss = JSON.parse(localStorage.getItem('ciee_session') || 'null');
       if (ss) { OneSignal.User.addTag('nivel', String(ss.nivel || 1)); if (ss.cidade) OneSignal.User.addTag('cidade', String(ss.cidade)); }

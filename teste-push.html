@@ -7,7 +7,9 @@
 <div id="r"></div>
 <button id="b" type="button">Ativar notificações</button>
 <p><small>Tire uma captura desta tela e envie se algum item aparecer com ❌.</small></p>
-<script>window.OneSignalDeferred = window.OneSignalDeferred || [];</script>
+<script>window.OneSignalDeferred = window.OneSignalDeferred || [];
+window.addEventListener('error', e => { try { document.getElementById('r').insertAdjacentHTML('beforeend', '<p>❌ Erro de script: ' + e.message + '</p>'); } catch (x) {} });
+window.addEventListener('unhandledrejection', e => { try { document.getElementById('r').insertAdjacentHTML('beforeend', '<p>❌ Erro: ' + ((e.reason && e.reason.message) || e.reason) + '</p>'); } catch (x) {} });</script>
 <script src="push.js"></script>
 <script>
 const r = document.getElementById('r');
@@ -24,16 +26,23 @@ const L = (ok, t) => r.insertAdjacentHTML('beforeend', '<p>' + (ok === null ? '�
     const regs = await navigator.serviceWorker.getRegistrations();
     L(regs.length > 0, 'Service worker: ' + (regs.length ? regs.map(g => g.scope + ' → ' + (g.active ? g.active.scriptURL.split('/').pop() : 'sem ativo')).join(' | ') : 'nenhum registrado'));
   } catch (e) { L(false, 'Service worker indisponível: ' + e.message); }
-  let sdk = false;
-  OneSignalDeferred.push(async function (OneSignal) {
-    sdk = true; L(true, 'SDK do OneSignal carregou');
+  // registra o service worker (como as outras páginas fazem) para o teste ficar completo
+  try { await navigator.serviceWorker.register('sw.js'); } catch (e) { L(false, 'Não consegui registrar o sw.js: ' + e.message); }
+  setTimeout(async () => {
+    const p = window.__push || {};
+    L(p.scriptCarregou === true, 'Script do OneSignal baixado: ' + (p.scriptCarregou === true ? 'sim' : p.scriptCarregou === false ? 'NÃO' : 'ainda não / sem resposta'));
+    L(p.init === true, 'OneSignal iniciou (init): ' + (p.init === true ? 'sim' : p.init === false ? 'NÃO' : 'sem resposta'));
+    if (p.erro) L(false, '<b>Erro:</b> ' + p.erro);
     try {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      L(regs.length > 0, 'Service worker agora: ' + (regs.length ? regs.map(g => g.scope).join(' | ') : 'nenhum'));
+    } catch (e) {}
+    if (p.init === true) OneSignalDeferred.push(async function (OneSignal) {
       const ps = OneSignal.User.PushSubscription;
-      L(!!ps.id, 'ID da inscrição: ' + (ps.id || 'ainda não existe (ative as notificações)'));
+      L(!!ps.id, 'ID da inscrição: ' + (ps.id || 'ainda não existe (toque em Ativar)'));
       L(!!ps.optedIn, 'Inscrito para receber: ' + (ps.optedIn ? 'sim' : 'não'));
-    } catch (e) { L(false, 'Erro lendo a inscrição: ' + e.message); }
-  });
-  setTimeout(() => { if (!sdk) L(false, 'SDK do OneSignal NÃO carregou (App ID vazio/inválido, internet ou bloqueador de anúncios)'); }, 7000);
+    });
+  }, 6000);
 })();
 document.getElementById('b').onclick = () => {
   if (window.cieescPush) { cieescPush.ativar(); setTimeout(() => location.reload(), 4000); }
