@@ -599,6 +599,11 @@
             .m-tools .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-weight: 800; color: var(--text-dark); }
             .m-tools .color-picker { display: flex; background: rgba(0,0,0,.06); }
             .m-tools .color-dot { border-color: var(--border-color); }
+            .m-tools { padding: 10px 20px 2px; gap: 8px; }
+            .m-compact { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: .85rem; color: var(--text-dark); }
+            .m-compact .color-picker { display: flex; background: rgba(0,0,0,.06); padding: 4px 8px; }
+            .m-compact .color-dot { border-color: var(--border-color); }
+            .m-pill { margin-left: auto; border: 1px solid var(--border-color); background: transparent; color: var(--text-dark); border-radius: 999px; padding: 5px 12px; font: 700 .75rem 'Nunito', sans-serif; cursor: pointer; }
             /* conteúdo em lista, de ponta a ponta */
             .tab-section { padding: 0; margin: 0 auto; max-width: none; }
             .section-title { font-size: 1.1rem; padding: 14px 16px 2px; margin: 0; }
@@ -1399,8 +1404,7 @@
             const itens = d => d ? [...d.querySelectorAll('.dropdown-item')].map(i => row(i.textContent.trim(), i)) : [];
             function tools() {
                 const t = document.createElement('div'); t.className = 'm-tools';
-                t.innerHTML = `<div class="row"><span>Cor do tema</span><div class="color-picker"><span class="color-dot rosa" onclick="setThemeColor('#d63384')"></span><span class="color-dot roxo" onclick="setThemeColor('#6f42c1')"></span><span class="color-dot azul" onclick="setThemeColor('#0056b3')"></span></div></div>
-                    <div class="row"><span>Claro / escuro</span><button class="btn-action btn-swap" type="button" onclick="toggleTheme()">🌙 Alternar</button></div>`;
+                t.innerHTML = `<div class="m-compact"><span>Tema</span><div class="color-picker"><span class="color-dot rosa" onclick="setThemeColor('#d63384')"></span><span class="color-dot roxo" onclick="setThemeColor('#6f42c1')"></span><span class="color-dot azul" onclick="setThemeColor('#0056b3')"></span></div><button class="m-pill" type="button" onclick="toggleTheme()">Claro / escuro</button></div>`;
                 return t;
             }
             const abas = {

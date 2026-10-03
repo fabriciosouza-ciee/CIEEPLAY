@@ -993,6 +993,13 @@
 
 .admin-brand .sep { font-size: .55em; opacity: .75; vertical-align: middle; margin: 0 2px; }
 @media (max-width: 820px) { .admin-brand { font-size: 1.15rem; } }
+
+@media (max-width: 820px) {
+    .m-tools { padding: 10px 20px 2px; gap: 8px; }
+    .m-compact { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: .85rem; color: var(--text-dark); }
+    .m-compact .theme-selector { padding: 4px 8px; }
+    .m-pill { margin-left: auto; border: 1px solid var(--border-color); background: transparent; color: var(--text-dark); border-radius: 999px; padding: 5px 12px; font: 700 .75rem 'Nunito', sans-serif; cursor: pointer; }
+}
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -1142,8 +1149,8 @@
                 <div class="pagination-bar">
                     <span id="page-info-solicitacoes">Página 1 de 1</span>
                     <div class="pagination-controls">
-                        <button class="btn-action btn-primary" id="btn-prev-solicitacoes" onclick="mudarPaginaSolicitacoes(-1)">◀ Anterior</button>
-                        <button class="btn-action btn-primary" id="btn-next-solicitacoes" onclick="mudarPaginaSolicitacoes(1)">Próxima ▶</button>
+                        <button class="btn-action btn-primary" id="btn-prev-solicitacoes" onclick="mudarPaginaSolicitacoes(-1)">Anterior</button>
+                        <button class="btn-action btn-primary" id="btn-next-solicitacoes" onclick="mudarPaginaSolicitacoes(1)">Próxima</button>
                     </div>
                 </div>
 
@@ -1215,7 +1222,7 @@
                             <button class="btn-action btn-primary" onclick="selecionarTodasEtiquetas(true)">☑️ Todas</button>
                             <button class="btn-action btn-desmarcar" onclick="selecionarTodasEtiquetas(false)">🔲 Nenhuma</button>
                             <button class="btn-action btn-success" onclick="sincronizarEtiquetas()">🔄 Sincronizar</button>
-                            <button class="btn-action btn-danger" onclick="excluirEtiquetasSelecionadas()">🗑️ Remover</button>
+                            <button class="btn-action btn-danger" onclick="excluirEtiquetasSelecionadas()">Remover</button>
                             <span id="contador-etiquetas-selecionadas" style="font-weight:800;font-size:0.85rem;color:#64748b;margin-left:auto">0 selecionadas</span>
                         </div>
                         <div class="labels-sheet" id="print-area"></div>
@@ -1234,8 +1241,8 @@
                         <tbody id="table-acervo"></tbody></table></div>
                     <div class="pagination-bar"><span id="page-info-acervo">Página 1 de 1</span>
                         <div class="pagination-controls">
-                            <button class="btn-action btn-primary" id="btn-prev-acervo" onclick="mudarPaginaAcervo(-1)">◀ Anterior</button>
-                            <button class="btn-action btn-primary" id="btn-next-acervo" onclick="mudarPaginaAcervo(1)">Próxima ▶</button>
+                            <button class="btn-action btn-primary" id="btn-prev-acervo" onclick="mudarPaginaAcervo(-1)">Anterior</button>
+                            <button class="btn-action btn-primary" id="btn-next-acervo" onclick="mudarPaginaAcervo(1)">Próxima</button>
                         </div></div>
                 </div>
 
@@ -1286,8 +1293,8 @@
                 <div class="pagination-bar">
                     <span id="page-info-turmas">Página 1 de 1</span>
                     <div class="pagination-controls">
-                        <button class="btn-action btn-primary" id="btn-prev-turmas" onclick="mudarPaginaTurmas(-1)">◀ Anterior</button>
-                        <button class="btn-action btn-primary" id="btn-next-turmas" onclick="mudarPaginaTurmas(1)">Próxima ▶</button>
+                        <button class="btn-action btn-primary" id="btn-prev-turmas" onclick="mudarPaginaTurmas(-1)">Anterior</button>
+                        <button class="btn-action btn-primary" id="btn-next-turmas" onclick="mudarPaginaTurmas(1)">Próxima</button>
                     </div>
                 </div>
             </section>
@@ -1304,8 +1311,8 @@
                     <tbody id="table-logins"></tbody></table></div>
                 <div class="pagination-bar"><span id="page-info-logins">Página 1 de 1</span>
                     <div class="pagination-controls">
-                        <button class="btn-action btn-primary" id="btn-prev-logins" onclick="mudarPaginaLogins(-1)">◀ Anterior</button>
-                        <button class="btn-action btn-primary" id="btn-next-logins" onclick="mudarPaginaLogins(1)">Próxima ▶</button>
+                        <button class="btn-action btn-primary" id="btn-prev-logins" onclick="mudarPaginaLogins(-1)">Anterior</button>
+                        <button class="btn-action btn-primary" id="btn-next-logins" onclick="mudarPaginaLogins(1)">Próxima</button>
                     </div></div>
             </section>
 
@@ -1350,8 +1357,8 @@
                     <tbody id="table-historico"></tbody></table></div>
                 <div class="pagination-bar"><span id="page-info-historico">Página 1 de 1</span>
                     <div class="pagination-controls">
-                        <button class="btn-action btn-primary" id="btn-prev-historico" onclick="mudarPaginaHistorico(-1)">◀ Anterior</button>
-                        <button class="btn-action btn-primary" id="btn-next-historico" onclick="mudarPaginaHistorico(1)">Próxima ▶</button>
+                        <button class="btn-action btn-primary" id="btn-prev-historico" onclick="mudarPaginaHistorico(-1)">Anterior</button>
+                        <button class="btn-action btn-primary" id="btn-next-historico" onclick="mudarPaginaHistorico(1)">Próxima</button>
                     </div></div>
             </section>
 
@@ -1413,7 +1420,7 @@
                         <input type="text" id="outlook-url" placeholder="https://outlook.office365.com/owa/calendar/.../calendar.html"></div>
                     <div class="sis-row">
                         <button class="btn-action btn-success" onclick="outlookSalvar()">💾 Salvar</button>
-                        <button class="btn-action btn-danger" onclick="outlookRemover()">🗑️ Remover</button>
+                        <button class="btn-action btn-danger" onclick="outlookRemover()">Remover</button>
                     </div>
                     <iframe id="outlook-prev" class="cal-prev" title="Prévia do calendário" style="display:none"></iframe>
                 </div>
@@ -2241,8 +2248,8 @@
                     <td>${obj.cidade}</td>
                     <td>
                         <div style="display: flex; gap: 4px;">
-                            <button class="btn-action btn-warning" onclick="editarObjeto(${index})">✏️ Editar</button>
-                            <button class="btn-action btn-danger" onclick="excluirObjeto(${index})">🗑️ Excluir</button>
+                            <button class="btn-action btn-warning" onclick="editarObjeto(${index})">Editar</button>
+                            <button class="btn-action btn-danger" onclick="excluirObjeto(${index})">Excluir</button>
                         </div>
                     </td>
                 </tr>
@@ -2421,8 +2428,8 @@
                             <td>${t.diaPeriodo}</td>
                             <td>
                                 <div style="display: flex; gap: 4px;">
-                                    <button class="btn-action btn-warning" onclick="editarTurma(${originalIndex})">✏️ Editar</button>
-                                    <button class="btn-action btn-danger" onclick="excluirTurma(${originalIndex})">🗑️ Excluir</button>
+                                    <button class="btn-action btn-warning" onclick="editarTurma(${originalIndex})">Editar</button>
+                                    <button class="btn-action btn-danger" onclick="excluirTurma(${originalIndex})">Excluir</button>
                                 </div>
                             </td>
                         </tr>
@@ -2528,8 +2535,8 @@
                     <td><span class="badge badge-blue">${c.nivel}</span></td>
                     <td>
                         <div style="display: flex; gap: 4px;">
-                            <button class="btn-action btn-warning" onclick="editarAcesso(${index})">✏️ Editar</button>
-                            <button class="btn-action btn-danger" onclick="excluirAcesso(${index})">🗑️ Excluir</button>
+                            <button class="btn-action btn-warning" onclick="editarAcesso(${index})">Editar</button>
+                            <button class="btn-action btn-danger" onclick="excluirAcesso(${index})">Excluir</button>
                         </div>
                     </td>
                 </tr>
@@ -2683,7 +2690,7 @@
                 { id: 'emprestimos', label: 'Empréstimos', niveis: N(2) },
                 { id: 'livros', label: 'Gestão de livros', niveis: N(2) },
                 { id: 'guias', label: 'Gestão de guias e manuais', niveis: N(2) },
-                { id: 'menuacervo', label: 'Menu Acervo (links do PLAY)', niveis: N(2) }
+                { id: 'menuacervo', label: 'Menu Acervo (links do PLAY)', niveis: N(2), oculto: true }
             ]},
             { id: 'objetos', label: 'Gestão de objetos', niveis: N(2) },
             { label: 'Gestão da equipe', itens: [
@@ -2729,7 +2736,7 @@
             nav.innerHTML = '<div class="drawer-head"><span>Menu</span><button class="drawer-close" type="button" aria-label="Fechar menu" onclick="closeAdminNav()">✕</button></div>';
             MENU.forEach(m => {
                 if (m.itens) {
-                    const itens = m.itens.filter(i => i.niveis.includes(nv));
+                    const itens = m.itens.filter(i => i.niveis.includes(nv) && !i.oculto);
                     if (!itens.length) return;
                     const d = document.createElement('div');
                     d.className = 'nav-drop';
@@ -2780,8 +2787,7 @@
                     d.querySelectorAll('.nav-item').forEach(i => nodes.push(mRow(i.textContent.trim(), i)));
                 });
                 const t = document.createElement('div'); t.className = 'm-tools';
-                t.innerHTML = `<div class="row"><span>Cor do tema</span><div class="theme-selector"><div class="color-dot blue" onclick="setColorTheme('blue')"></div><div class="color-dot purple" onclick="setColorTheme('purple')"></div><div class="color-dot pink" onclick="setColorTheme('pink')"></div></div></div>
-                    <div class="row"><span>Claro / escuro</span><button class="btn-action btn-primary" type="button" onclick="toggleDarkTheme()">🌙 Alternar</button></div>`;
+                t.innerHTML = `<div class="m-compact"><span>Tema</span><div class="theme-selector"><div class="color-dot blue" onclick="setColorTheme('blue')"></div><div class="color-dot purple" onclick="setColorTheme('purple')"></div><div class="color-dot pink" onclick="setColorTheme('pink')"></div></div><button class="m-pill" type="button" onclick="toggleDarkTheme()">Claro / escuro</button></div>`;
                 nodes.push(t);
                 nodes.push(mRow('📚 Acervo (PLAY)', { click: () => { location.href = 'playing.html'; } }));
                 nodes.push(mRow('🚪 Desconectar', { click: () => logout() }));
@@ -2791,10 +2797,11 @@
         }
         function mSync() {
             const bar = $('m-tabbar'); if (!bar) return;
-            const item = document.querySelector('#admin-nav .nav-item.active');
+            const sec = document.querySelector('.admin-section.active');
+            const id = sec ? sec.id.replace(/^admin-/, '') : 'inicio';
+            const f = MENU_FLAT.find(i => i.id === id);
             let k = 'mais';
-            if (item) { const g = dropLabel(item.closest('.nav-drop')); k = M_SLOTS.some(x => x.k === g) ? g : 'mais'; }
-            else if (document.querySelector('#admin-nav > .nav-tab.active[data-tab="inicio"]')) k = 'inicio';
+            if (id === 'inicio') k = 'inicio'; else if (f && M_SLOTS.some(x => x.k === f.grupo)) k = f.grupo;
             bar.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.m === k));
             const bt = document.getElementById('brand-text'); if (!bt) return;
             let nv = 0, byp = false;
@@ -2806,8 +2813,8 @@
             const CURTO = { 'gestão de livros': 'livros', 'gestão de guias e manuais': 'guias e manuais', 'menu acervo (links do play)': 'menu acervo', 'gestão de objetos': 'objetos',
                 'administrativo cieesc': 'administrativo', 'gestão de logins': 'logins', 'dúvidas frequentes': 'dúvidas', 'histórico geral': 'histórico',
                 'app em manutenção': 'manutenção', 'histórico de versões': 'versões', 'calendário outlook (iframe)': 'calendário outlook' };
-            const ativo = document.querySelector('#admin-nav .nav-item.active') || document.querySelector('#admin-nav > .nav-tab.active');
-            let pg = ativo ? ativo.textContent.replace('▾', '').replace(/^[^A-Za-zÀ-ÿ]+/, '').trim().toLowerCase() : 'início';
+            const rot = f ? f.label : ((sec && sec.querySelector('h2')) ? sec.querySelector('h2').textContent : 'início');
+            let pg = rot.replace('▾', '').replace(/^[^A-Za-zÀ-ÿ]+/, '').trim().toLowerCase();
             pg = CURTO[pg] || pg || 'início';
             if (_mq.matches && AREA[nv]) bt.innerHTML = '<span class="play-cor">▶︎</span> ' + AREA[nv] + ' <span class="sep">●</span> ' + pg;
             else if (DESK[nv]) bt.textContent = DESK[nv];
@@ -2966,9 +2973,9 @@
                     <td>${escHtml(item.local || '-')}</td>
                     <td><span class="badge ${emp ? 'badge-red' : 'badge-green'}">${emp ? 'Emprestado' : 'Disponível'}</span></td>
                     <td><div style="display:flex;gap:4px;flex-wrap:wrap">
-                        <button class="btn-action btn-warning" onclick="editarLivro(${i})">✏️ Editar</button>
+                        <button class="btn-action btn-warning" onclick="editarLivro(${i})">Editar</button>
                         <button class="btn-action btn-primary" onclick="gerarEtiquetaLivro(${i})" title="Adicionar às etiquetas">🏷️</button>
-                        <button class="btn-action btn-danger" onclick="excluirLivro(${i})">🗑️ Excluir</button>
+                        <button class="btn-action btn-danger" onclick="excluirLivro(${i})">Excluir</button>
                     </div></td></tr>`;
             }).join('') : `<tr><td colspan="8" style="text-align:center;color:#94a3b8">Nenhum livro físico encontrado.</td></tr>`;
 
@@ -3269,8 +3276,8 @@
                 <div class="search-bar-container">${filtro}<input id="crud-search-${id}" class="search-input" placeholder="🔎 Buscar..." oninput="crudSearch('${id}')"></div>
                 <div class="table-responsive"><table class="admin-table"><thead><tr>${c.cols.map(x => `<th>${x.t}</th>`).join('')}<th>Ações</th></tr></thead><tbody id="crud-body-${id}"></tbody></table></div>
                 <div class="pagination-bar"><span id="crud-info-${id}">Página 1 de 1</span><div class="pagination-controls">
-                    <button class="btn-action btn-primary" id="crud-prev-${id}" onclick="crudPage('${id}',-1)">◀ Anterior</button>
-                    <button class="btn-action btn-primary" id="crud-next-${id}" onclick="crudPage('${id}',1)">Próxima ▶</button></div></div>`;
+                    <button class="btn-action btn-primary" id="crud-prev-${id}" onclick="crudPage('${id}',-1)">Anterior</button>
+                    <button class="btn-action btn-primary" id="crud-next-${id}" onclick="crudPage('${id}',1)">Próxima</button></div></div>`;
             if (c.mount) $(c.mount).innerHTML = html;
             else { const s = document.createElement('section'); s.id = 'admin-' + id; s.className = 'admin-section'; s.innerHTML = html; $('dyn-sections').appendChild(s); }
         }
@@ -3290,8 +3297,8 @@
             if (c.page > paginas) c.page = paginas;
             const fatia = lista.slice((c.page - 1) * 10, c.page * 10);
             body.innerHTML = fatia.length ? fatia.map(({ it, i }) => `<tr>${c.cols.map(x => `<td>${x.f ? x.f(it) : escHtml(it[x.k])}</td>`).join('')}
-                <td><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn-action btn-warning" onclick="crudEdit('${id}',${i})">✏️ Editar</button>
-                <button class="btn-action btn-danger" onclick="crudDel('${id}',${i})">🗑️ Excluir</button></div></td></tr>`).join('')
+                <td><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn-action btn-warning" onclick="crudEdit('${id}',${i})">Editar</button>
+                <button class="btn-action btn-danger" onclick="crudDel('${id}',${i})">Excluir</button></div></td></tr>`).join('')
                 : `<tr><td colspan="${c.cols.length + 1}" style="text-align:center;color:#94a3b8">${c.vazio || 'Nenhum registro.'}</td></tr>`;
             $('crud-info-' + id).innerText = `Página ${c.page} de ${paginas} • ${lista.length} registro(s)`;
             $('crud-prev-' + id).disabled = c.page === 1;
@@ -3384,8 +3391,8 @@
             const b = $('table-cidades'); if (!b) return;
             b.innerHTML = cidadesList.map((c, i) => `<tr><td><strong>${escHtml(c)}</strong></td><td>${turmas.filter(t => t.cidade === c).length}</td>
                 <td>${lsGet('ciee_users', []).filter(u => u.cidade === c).length}</td>
-                <td><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn-action btn-warning" onclick="editarCidade(${i})">✏️ Renomear</button>
-                <button class="btn-action btn-danger" onclick="excluirCidade(${i})">🗑️ Excluir</button></div></td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:#94a3b8">Nenhuma cidade.</td></tr>';
+                <td><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn-action btn-warning" onclick="editarCidade(${i})">Renomear</button>
+                <button class="btn-action btn-danger" onclick="excluirCidade(${i})">Excluir</button></div></td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:#94a3b8">Nenhuma cidade.</td></tr>';
         }
         function novaCidade() {
             abrirModalCustom({ titulo: 'Nova cidade', icone: '📍', texto: 'Ela aparecerá no cadastro dos aprendizes e nas turmas:', camposMultiplos: [{ id: 'nome', label: 'Nome da cidade:', obrigatorio: true }],
@@ -3463,10 +3470,10 @@
                     <td>${fmtBR(u.validade)} ${validadeStatus(u.validade)}</td>
                     <td>${ip ? `<code>${escHtml(ip.ip)}</code><br><small>${new Date(ip.ts).toLocaleString('pt-BR')}</small>` : '<small>—</small>'}</td>
                     <td><div style="display:flex;gap:4px;flex-wrap:wrap">
-                        <button class="btn-action btn-warning" onclick="editarLogin(${i})">✏️ Editar</button>
+                        <button class="btn-action btn-warning" onclick="editarLogin(${i})">Editar</button>
                         <button class="btn-action btn-primary" onclick="trocarSenhaLogin(${i})">🔑 Senha</button>
                         <button class="btn-action btn-success" onclick="alterarValidadeLogin(${i})">📅 Validade</button>
-                        <button class="btn-action btn-danger" onclick="excluirLogin(${i})">🗑️</button></div></td></tr>`;
+                        <button class="btn-action btn-danger" onclick="excluirLogin(${i})">Excluir</button></div></td></tr>`;
             }).join('') : '<tr><td colspan="6" style="text-align:center;color:#94a3b8">Nenhum usuário encontrado.</td></tr>';
             $('page-info-logins').innerText = `Página ${pageLogins} de ${paginas} • ${lista.length} usuário(s)`;
             $('btn-prev-logins').disabled = pageLogins === 1;
@@ -3593,7 +3600,7 @@
             $('table-versoes').innerHTML = l.length ? l.map((v, i) => `<tr><td><strong>${escHtml(v.versao)}</strong></td><td>${fmtBR(v.data)}</td><td>${escHtml(v.notas || '')}</td>
                 <td>${v.versao === atual ? '<span class="badge badge-green">Atual</span>' : '<span class="badge badge-yellow">Anterior</span>'}</td>
                 <td><div style="display:flex;gap:4px;flex-wrap:wrap">${v.versao === atual ? '' : `<button class="btn-action btn-primary" onclick="versaoAtual(${i})">✔ Tornar atual</button>`}
-                <button class="btn-action btn-danger" onclick="excluirVersao(${i})">🗑️</button></div></td></tr>`).join('') : '<tr><td colspan="5" style="text-align:center;color:#94a3b8">Nenhuma versão registrada.</td></tr>';
+                <button class="btn-action btn-danger" onclick="excluirVersao(${i})">Excluir</button></div></td></tr>`).join('') : '<tr><td colspan="5" style="text-align:center;color:#94a3b8">Nenhuma versão registrada.</td></tr>';
         }
         function novaVersao() {
             abrirModalCustom({
