@@ -980,6 +980,16 @@
     .rank-list .medal { font-size: 1.4rem; }
     .sec-intro { font-size: .8rem; }
 }
+
+/* ===== Cabeçalho do celular: ▶ colorido + perfil; sem botão de tema nem avatar de ByPass ===== */
+.play-cor { display: inline-block; animation: playCorH 6s ease-in-out infinite; }
+@keyframes playCorH { 0%,100% { color: #ff7eb6 } 33% { color: #b49cff } 66% { color: #60a5fa } }
+@media (max-width: 820px) {
+    .admin-brand::before { display: none; }
+    .btn-theme-toggle { display: none; }
+    body.is-bypass .user-badge-admin { display: none; }
+    .admin-brand { font-size: 1.35rem; }
+}
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -1552,7 +1562,6 @@
                 document.title = tituloFormatado;
                 const brandText = document.getElementById('brand-text');
                 if (brandText) brandText.innerText = tituloFormatado;
-                if (typeof mSync === 'function') mSync();
             }
 
             if (sessionData.nivel >= 3) {
@@ -2785,10 +2794,12 @@
             else if (document.querySelector('#admin-nav > .nav-tab.active[data-tab="inicio"]')) k = 'inicio';
             bar.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.m === k));
             const bt = document.getElementById('brand-text'); if (!bt) return;
-            const nv = (typeof sessionData !== 'undefined' && sessionData) ? sessionData.nivel : 0;
-            const AREA = { 2: 'Área do Monitor', 3: 'Área do Orientador', 4: 'Área do Admin' };
+            let nv = 0, byp = false;
+            try { nv = sessionData.nivel; byp = !!sessionData.bypass; } catch (e) {}
+            document.body.classList.toggle('is-bypass', byp);
+            const AREA = { 2: 'Monitor', 3: 'Orientador', 4: 'Admin' };
             const DESK = { 2: 'CIEESC ▶︎ PLAY • Monitores', 3: 'CIEESC ▶︎ PLAY • Orientadores', 4: 'CIEESC ▶︎ PLAY • Administrador' };
-            if (_mq.matches && AREA[nv]) bt.textContent = AREA[nv];
+            if (_mq.matches && AREA[nv]) bt.innerHTML = '<span class="play-cor">▶︎</span> ' + AREA[nv];
             else if (DESK[nv]) bt.textContent = DESK[nv];
         }
         $('m-backdrop').addEventListener('click', closeSheet);
