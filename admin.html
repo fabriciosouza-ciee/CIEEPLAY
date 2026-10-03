@@ -1301,7 +1301,7 @@
 
             <!-- AUDITORIA › GESTÃO DE LOGINS -->
             <section id="admin-logins" class="admin-section">
-                <div class="section-header"><h2>🔐 Gestão de logins</h2><button class="btn-action btn-success" onclick="novoLogin()">➕ Novo usuário</button></div>
+                <div class="section-header"><h2>🔐 Gestão de cadastros</h2><button class="btn-action btn-success" onclick="novoLogin()">➕ Novo usuário</button></div>
                 <p class="sec-intro">Usuários cadastrados no PLAY: edite dados, troque a senha na hora, altere a validade da carteirinha ou exclua.</p>
                 <div class="search-bar-container">
                     <input type="text" id="search-logins" class="search-input" placeholder="🔎 Buscar por nome, e-mail ou WhatsApp..." oninput="filtrarLogins()">
@@ -2700,7 +2700,7 @@
                 { id: 'adm', label: 'Administrativo CIEESC', niveis: N(2) }
             ]},
             { label: 'Auditoria', itens: [
-                { id: 'logins', label: 'Gestão de logins', niveis: N(4) }
+                { id: 'logins', label: 'Gestão de cadastros', niveis: N(4) }
             ]},
             { label: 'Utilidades', itens: [
                 { id: 'mural', label: 'Mural', niveis: N(2) },
@@ -2724,7 +2724,7 @@
             1: { nome: 'Aprendiz', desc: 'Usa o CIEESC ▶︎ PLAY (acervo, mural, carteirinha). Não acessa este painel.' },
             2: { nome: 'Monitores', desc: 'Atende solicitações e empréstimos, cadastra livros e conteúdos. Exclusões precisam de aprovação dos orientadores/webmaster.' },
             3: { nome: 'Orientadores', desc: 'Tudo do monitor + aprovar/recusar exclusões e gerenciar os monitores.' },
-            4: { nome: 'Webmaster', desc: 'Acesso total: orientadores, gestão de logins, ByPass e todas as demais áreas.' }
+            4: { nome: 'Webmaster', desc: 'Acesso total: orientadores, gestão de cadastros, ByPass e todas as demais áreas.' }
         };
 
         const $ = id => document.getElementById(id);
@@ -2781,6 +2781,7 @@
             });
             add('☰', 'Mais', 'mais', () => {
                 const nodes = [], usados = M_SLOTS.map(x => x.k);
+                nodes.push(mRow('Ir para o Portal', { click: () => { location.href = 'playing.html'; } }));
                 document.querySelectorAll('#admin-nav > .nav-tab[data-tab]').forEach(t => { if (t.dataset.tab !== 'inicio') nodes.push(mRow(t.textContent.trim(), t)); });
                 drops.filter(d => !usados.includes(dropLabel(d))).forEach(d => {
                     const h = document.createElement('div'); h.className = 'm-sub'; h.textContent = dropLabel(d); nodes.push(h);
@@ -2789,7 +2790,6 @@
                 const t = document.createElement('div'); t.className = 'm-tools';
                 t.innerHTML = `<div class="m-compact"><span>Tema</span><div class="theme-selector"><div class="color-dot blue" onclick="setColorTheme('blue')"></div><div class="color-dot purple" onclick="setColorTheme('purple')"></div><div class="color-dot pink" onclick="setColorTheme('pink')"></div></div><button class="m-pill" type="button" onclick="toggleDarkTheme()">Claro / escuro</button></div>`;
                 nodes.push(t);
-                nodes.push(mRow('📚 Acervo (PLAY)', { click: () => { location.href = 'playing.html'; } }));
                 nodes.push(mRow('🚪 Desconectar', { click: () => logout() }));
                 mOpen('☰ Mais', nodes);
             });
@@ -2811,7 +2811,7 @@
             const DESK = { 2: 'CIEESC ▶︎ PLAY • Monitores', 3: 'CIEESC ▶︎ PLAY • Orientadores', 4: 'CIEESC ▶︎ PLAY • Administrador' };
             // nome curto da página aberta, em minúsculas (ex.: "início", "solicitações", "calendário")
             const CURTO = { 'gestão de livros': 'livros', 'gestão de guias e manuais': 'guias e manuais', 'menu acervo (links do play)': 'menu acervo', 'gestão de objetos': 'objetos',
-                'administrativo cieesc': 'administrativo', 'gestão de logins': 'logins', 'dúvidas frequentes': 'dúvidas', 'histórico geral': 'histórico',
+                'administrativo cieesc': 'administrativo', 'gestão de cadastros': 'cadastros', 'dúvidas frequentes': 'dúvidas', 'histórico geral': 'histórico',
                 'app em manutenção': 'manutenção', 'histórico de versões': 'versões', 'calendário outlook (iframe)': 'calendário outlook' };
             const rot = f ? f.label : ((sec && sec.querySelector('h2')) ? sec.querySelector('h2').textContent : 'início');
             let pg = rot.replace('▾', '').replace(/^[^A-Za-zÀ-ÿ]+/, '').trim().toLowerCase();
@@ -3450,7 +3450,7 @@
             pageHistorico = 1; renderHistorico();
         }
 
-        // ---------- 11. Auditoria › Gestão de Logins ----------
+        // ---------- 11. Auditoria › Gestão de cadastros ----------
         let pageLogins = 1, searchLogins = '';
         const getUsuarios = () => lsGet('ciee_users', []);
         const validadeStatus = v => !v ? '<span class="badge badge-yellow">Sem data</span>' : (new Date(v + 'T23:59:59') < new Date() ? '<span class="badge badge-red">Vencida</span>' : '<span class="badge badge-green">Vigente</span>');
@@ -3471,8 +3471,8 @@
                     <td>${ip ? `<code>${escHtml(ip.ip)}</code><br><small>${new Date(ip.ts).toLocaleString('pt-BR')}</small>` : '<small>—</small>'}</td>
                     <td><div style="display:flex;gap:4px;flex-wrap:wrap">
                         <button class="btn-action btn-warning" onclick="editarLogin(${i})">Editar</button>
-                        <button class="btn-action btn-primary" onclick="trocarSenhaLogin(${i})">🔑 Senha</button>
-                        <button class="btn-action btn-success" onclick="alterarValidadeLogin(${i})">📅 Validade</button>
+                        <button class="btn-action btn-primary" onclick="trocarSenhaLogin(${i})">Senha</button>
+                        <button class="btn-action btn-success" onclick="alterarValidadeLogin(${i})">Validade</button>
                         <button class="btn-action btn-danger" onclick="excluirLogin(${i})">Excluir</button></div></td></tr>`;
             }).join('') : '<tr><td colspan="6" style="text-align:center;color:#94a3b8">Nenhum usuário encontrado.</td></tr>';
             $('page-info-logins').innerText = `Página ${pageLogins} de ${paginas} • ${lista.length} usuário(s)`;
