@@ -1011,6 +1011,7 @@
     #m-tabbar .ic svg { width: 24px; height: 24px; }
     #m-tabbar button { padding: 2px 0; }
 }
+.burger, .drawer-head, .drawer-tools, #nav-backdrop { display: none !important; }
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -1066,12 +1067,10 @@
     <!-- Conteúdo do Painel Administrativo -->
     <div id="admin-main-wrapper">
         <!-- Header -->
-        <div id="nav-backdrop" onclick="closeAdminNav()"></div>
         <div id="m-backdrop"></div>
         <div id="m-sheet" role="dialog" aria-modal="true"><div class="m-grab"></div><div class="m-sheet-title" id="m-sheet-title"></div><div id="m-sheet-body"></div></div>
         <nav id="m-tabbar" aria-label="Navegação principal"></nav>
         <header>
-            <button class="burger" id="btn-burger" type="button" aria-label="Abrir menu" onclick="toggleAdminNav()">☰</button>
             <div class="admin-brand" id="brand-header">
                 <span id="brand-text">CIEESC ▶︎ PLAY</span>
             </div>
@@ -2732,7 +2731,7 @@
         function buildNav() {
             const nv = nivelAtual(), nav = $('admin-nav');
             if (!nav) return;
-            nav.innerHTML = '<div class="drawer-head"><span>Menu</span><button class="drawer-close" type="button" aria-label="Fechar menu" onclick="closeAdminNav()">✕</button></div>';
+            nav.innerHTML = '';
             MENU.forEach(m => {
                 if (m.itens) {
                     const itens = m.itens.filter(i => i.niveis.includes(nv) && !i.oculto);
@@ -2749,12 +2748,6 @@
                     nav.appendChild(b);
                 }
             });
-            const t = document.createElement('div'); t.className = 'drawer-tools';
-            t.innerHTML = `<div class="row"><span>Cor do tema</span><div class="theme-selector"><div class="color-dot blue" onclick="setColorTheme('blue')"></div><div class="color-dot purple" onclick="setColorTheme('purple')"></div><div class="color-dot pink" onclick="setColorTheme('pink')"></div></div></div>
-                <div class="row"><span>Claro / escuro</span><button class="btn-action btn-primary" type="button" onclick="toggleDarkTheme()">🌙 Alternar</button></div>
-                <a href="playing.html" class="btn-portal">📚 Acervo</a>
-                <a href="index.html" class="btn-desconectar" onclick="logout(); return false;">🚪 Desconectar</a>`;
-            nav.appendChild(t);
             buildMobileBar();
         }
         // ===== Layout de celular: barra inferior + folhas (só aparecem em telas estreitas) =====
