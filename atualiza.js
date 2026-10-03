@@ -61,7 +61,7 @@
   window.addEventListener('load', () => {
     if (/[?&]teste-aviso=1/.test(location.search)) { setTimeout(() => aviso(null), 800); return; }
     setTimeout(verificar, 3000);
-    setInterval(verificar, 5 * 60 * 1000);
+    setInterval(verificar, 2 * 60 * 1000);
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') verificar(); });
   });
 })();
