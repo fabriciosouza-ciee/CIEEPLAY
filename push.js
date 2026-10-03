@@ -3,7 +3,7 @@
 const PUSH_APP_ID = 'f5587a67-7481-4538-bfd2-7746b9e1038a';
 
 (function () {
-  if (!PUSH_APP_ID || PUSH_APP_ID.startsWith('f5587a67-7481-4538-bfd2-7746b9e1038a')) return;      // ainda não configurado
+  if (!PUSH_APP_ID || PUSH_APP_ID.startsWith('COLE-AQUI')) return;      // ainda não configurado
 
   const base = location.pathname.replace(/[^/]*$/, '');                  // ex.: /CIEESC_PLAY/
   window.OneSignalDeferred = window.OneSignalDeferred || [];
