@@ -75,7 +75,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{background-color:var(--the
 .terms-hint{font-size:.75rem;color:#718096;font-weight:700;text-align:center;margin-bottom:8px}
 /* Carteirinha */
 .library-card{background:linear-gradient(135deg,#0056b3 0%,#6f42c1 100%);color:#fff;border-radius:20px;padding:14px;box-shadow:0 10px 20px rgba(0,0,0,.2);text-align:left;margin-bottom:12px}
-.card-header-ciee{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.25);padding-bottom:6px;margin-bottom:10px}
+.card-header-ciee{display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,.25);padding-bottom:6px;margin-bottom:10px}
 .card-header-ciee img{max-height:24px;background:#fff;padding:2px 6px;border-radius:6px}
 .card-badge{background:var(--yellow-accent);color:#1a202c;padding:2px 8px;border-radius:8px;font-family:'Fredoka',cursive;font-size:.7rem}
 .card-body-ciee{display:flex;gap:10px;align-items:center}
@@ -190,7 +190,7 @@ body{font-size:1rem}
 .login-msg,.terms-hint,.mail-status,.strength-label,.pass-msg,.pass-legend li{font-size:.85rem}
 .admin-footer{font-size:.85rem}
 /* ===== Logo: play dentro de hexágono com cores que alternam (rosa → roxo → azul) ===== */
-.brand-logo::before, .admin-brand::before, .card-front h2::before {
+.brand-logo::before, .admin-brand::before {
     content: ""; display: inline-block; width: 1.35em; height: 1.35em; margin-right: .4em; vertical-align: -0.28em;
     background: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id=%22g%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%3E%3Canimate%20attributeName=%22stop-color%22%20values=%22%23d63384;%236f42c1;%230056b3;%23d63384%22%20dur=%226s%22%20repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop%20offset=%221%22%3E%3Canimate%20attributeName=%22stop-color%22%20values=%22%23ff8fab;%23a78bfa;%2300b4d8;%23ff8fab%22%20dur=%226s%22%20repeatCount=%22indefinite%22/%3E%3C/stop%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon%20points=%2227,9%2073,9%2097,50%2073,91%2027,91%203,50%22%20fill=%22url(%23g)%22%20stroke=%22%23fff%22%20stroke-width=%223%22%20stroke-linejoin=%22round%22/%3E%3Cpolygon%20points=%2242,32%2042,68%2071,50%22%20fill=%22%23fff%22/%3E%3C/svg%3E") center / contain no-repeat;
 }
@@ -232,6 +232,12 @@ body.flipping, body.flipping .hex-shape { animation-play-state: paused; }   /* l
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes shrink{0%{opacity:0;transform:scale(22)}15%{opacity:.5}100%{opacity:1;transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){#splash-screen .sh,#splash-screen .w,#splash-screen .ic,#splash-screen .sub{animation-duration:.01s!important;animation-delay:0s!important}}
+
+/* ▶ do título da caixa de login/cadastro alterna rosa → roxo → azul */
+.play-cor{display:inline-block;animation:playCor 6s ease-in-out infinite}
+@keyframes playCor{0%,100%{color:#d63384}33%{color:#6f42c1}66%{color:#0056b3}}
+@keyframes playCorEscuro{0%,100%{color:#ff7eb6}33%{color:#b49cff}66%{color:#60a5fa}}
+.scene.dark-reg .play-cor{animation-name:playCorEscuro}
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -271,7 +277,7 @@ body.flipping, body.flipping .hex-shape { animation-play-state: paused; }   /* l
       </div>
       <button type="button" class="theme-toggle" onclick="toggleRegTheme()" aria-label="Alternar tema claro e escuro">🌙 Escuro</button>
     </div>
-    <h2>CIEESC ▶︎ PLAY</h2>
+    <h2>CIEESC <span class="play-cor">▶︎</span> PLAY</h2>
     <p class="front-sub">Escolha como deseja acessar:</p>
     <div class="maint-banner">🛠️ App em manutenção. Neste momento só o acesso da equipe (BYPASS) está liberado.</div>
     <button class="btn-choice" onclick="flipTo('login')">🔑 Login</button>
@@ -458,7 +464,6 @@ body.flipping, body.flipping .hex-shape { animation-play-state: paused; }   /* l
       <div id="card-preview-section" style="display:none">
         <div class="library-card">
           <div class="card-header-ciee">
-            <img src="https://centralcieesc.org.br/SOL/Images/cieeSC2018.png" alt="CIEE SC">
             <span class="card-badge">BIBLIOTECA CIEE SC</span>
           </div>
           <div class="card-body-ciee">
@@ -467,7 +472,7 @@ body.flipping, body.flipping .hex-shape { animation-play-state: paused; }   /* l
               <div class="card-info-name" id="card-name-display">Aprendiz</div>
               <div><strong>Cidade:</strong> <span id="card-city-display">-</span></div>
               <div><strong>Período:</strong> <span id="card-period-display">-</span></div>
-              <div class="card-info-exp">📅 Validade: <span id="card-exp-display">DD/MM/AAAA</span></div>
+              <div class="card-info-exp">Validade: <span id="card-exp-display">DD/MM/AAAA</span></div>
             </div>
           </div>
         </div>
@@ -890,7 +895,7 @@ let reviewTimer = null;
 function startReviewTimer(){
   const btn = document.getElementById('btn-confirm-review');
   const label = 'Tudo Certo! Prosseguir ➔';
-  let left = 15;
+  let left = 10;
   clearInterval(reviewTimer);
   btn.disabled = true; btn.classList.add('btn-disabled');
   btn.textContent = `Confira os dados... (${left}s)`;
