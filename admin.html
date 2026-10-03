@@ -941,11 +941,6 @@
             .admin-table td > div[style*="flex"] { justify-content: flex-end; }
             td .btn-action, .admin-table .btn-action { width: auto; padding: 6px 10px; font-size: .8rem; }
         }
-/* ===== Logo: play dentro de hexágono com cores que alternam (rosa → roxo → azul) ===== */
-.brand-logo::before, .admin-brand::before, .card-front h2::before, #splash-screen h1::before {
-    content: ""; display: inline-block; width: 1.35em; height: 1.35em; margin-right: .4em; vertical-align: -0.28em;
-    background: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id=%22g%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%3E%3Canimate%20attributeName=%22stop-color%22%20values=%22%23d63384;%236f42c1;%230056b3;%23d63384%22%20dur=%226s%22%20repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop%20offset=%221%22%3E%3Canimate%20attributeName=%22stop-color%22%20values=%22%23ff8fab;%23a78bfa;%2300b4d8;%23ff8fab%22%20dur=%226s%22%20repeatCount=%22indefinite%22/%3E%3C/stop%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon%20points=%2227,9%2073,9%2097,50%2073,91%2027,91%203,50%22%20fill=%22url(%23g)%22%20stroke=%22%23fff%22%20stroke-width=%223%22%20stroke-linejoin=%22round%22/%3E%3Cpolygon%20points=%2242,32%2042,68%2071,50%22%20fill=%22%23fff%22/%3E%3C/svg%3E") center / contain no-repeat;
-}
 
 /* ===== Painel no celular: compacto, títulos em barra, tabelas sem largura fixa ===== */
 @media (max-width: 820px) {
@@ -1072,7 +1067,7 @@
         <nav id="m-tabbar" aria-label="Navegação principal"></nav>
         <header>
             <div class="admin-brand" id="brand-header">
-                <span id="brand-text">CIEESC ▶︎ PLAY</span>
+                <span id="brand-text">CIEESC <span class="play-cor">▶︎</span> PLAY</span>
             </div>
             <div class="header-controls">
                 <div class="theme-selector" title="Escolha a cor do tema">
@@ -1082,7 +1077,7 @@
                 </div>
 
                 <button class="btn-theme-toggle" onclick="toggleDarkTheme()" id="theme-toggle-btn" title="Alternar Tema">🌙</button>
-                <a href="playing.html" class="btn-portal">📚 Acervo</a>
+                <a href="playing.html" class="btn-portal">📚 Portal</a>
                 <a href="index.html" class="btn-desconectar" onclick="logout(); return false;">🚪 Desconectar</a>
                 <div class="user-badge-admin">
                     <span id="admin-avatar" style="font-size: 1.2rem;">👨‍💻</span>
@@ -1125,9 +1120,16 @@
                 <div class="panel">
                     <h3>🟢 Conectados em tempo real <span class="badge badge-green" id="online-count">0</span></h3>
                     <div class="table-responsive"><table class="admin-table">
-                        <thead><tr><th>Usuário</th><th>Perfil</th><th>IP</th><th>Página</th><th>Atividade</th></tr></thead>
+                        <thead><tr><th>Usuário</th><th>Perfil</th><th>IP</th><th>Página</th><th>Atividade</th><th id="th-online-acoes" style="display:none">Ações</th></tr></thead>
                         <tbody id="table-online"></tbody></table></div>
                     <p class="sec-intro" style="margin:10px 0 0">Atualiza a cada 5 segundos. Mostra quem está com o PLAY/painel aberto neste navegador; o IP é consultado pelo aparelho de cada pessoa.</p>
+                </div>
+                <div class="panel" id="panel-bans" style="display:none">
+                    <h3>🚫 IPs banidos <span class="badge badge-red" id="bans-count">0</span></h3>
+                    <div class="table-responsive"><table class="admin-table">
+                        <thead><tr><th>IP</th><th>Usuário</th><th>Motivo</th><th>Quando</th><th>Ações</th></tr></thead>
+                        <tbody id="table-bans"></tbody></table></div>
+                    <p class="sec-intro" style="margin:10px 0 0">Só o nível Webmaster vê esta lista. Administradores nunca são bloqueados. Os dados valem para este navegador/domínio; para atingir todos os aparelhos é preciso um servidor.</p>
                 </div>
             </section>
 
@@ -1312,7 +1314,7 @@
 
             <!-- AUDITORIA › GESTÃO DE LOGINS -->
             <section id="admin-logins" class="admin-section">
-                <div class="section-header"><h2>🔐 Gestão de cadastros</h2><button class="btn-action btn-success" onclick="novoLogin()">➕ Novo usuário</button></div>
+                <div class="section-header"><h2>🎓 Aprendizes</h2><button class="btn-action btn-success" onclick="novoLogin()">➕ Novo usuário</button></div>
                 <p class="sec-intro">Usuários cadastrados no PLAY: edite dados, troque a senha na hora, altere a validade da carteirinha ou exclua.</p>
                 <div class="search-bar-container">
                     <input type="text" id="search-logins" class="search-input" placeholder="🔎 Buscar por nome, e-mail ou WhatsApp..." oninput="filtrarLogins()">
@@ -1570,7 +1572,7 @@
                 const tituloFormatado = titulosPorNivel[sessionData.nivel];
                 document.title = tituloFormatado;
                 const brandText = document.getElementById('brand-text');
-                if (brandText) brandText.innerText = tituloFormatado;
+                if (brandText) brandText.innerHTML = tituloFormatado.replace('▶︎', '<span class="play-cor">▶︎</span>');
             }
 
             if (sessionData.nivel >= 3) {
@@ -2694,26 +2696,24 @@
             { id: 'objetos', label: 'Gestão de objetos', niveis: N(2) },
             { label: 'Gestão da equipe', itens: [
                 { id: 'turmas', label: 'Cidades e turmas', niveis: N(2) },
-                { id: 'orientadores', label: 'Orientadores', niveis: N(4) },
+                { id: 'logins', label: 'Aprendizes', niveis: N(4) },
                 { id: 'monitores', label: 'Monitores', niveis: N(3) },
-                { id: 'adm', label: 'Administrativo CIEESC', niveis: N(2) }
-            ]},
-            { label: 'Auditoria', itens: [
-                { id: 'logins', label: 'Gestão de cadastros', niveis: N(4) }
+                { id: 'orientadores', label: 'Orientadores', niveis: N(4) },
+                { id: 'adm', label: 'Administrativo CIEESC', niveis: N(2) },
+                { id: 'webmaster-codes', label: 'ByPass', niveis: N(4) }
             ]},
             { label: 'Utilidades', itens: [
                 { id: 'mural', label: 'Mural', niveis: N(2) },
                 { id: 'calendario', label: 'Calendário', niveis: N(2) },
                 { id: 'artes', label: 'Artes em foco', niveis: N(2) },
                 { id: 'wifi', label: 'Wi-fi', niveis: N(2) },
-                { id: 'faq', label: 'Dúvidas frequentes', niveis: N(2) },
-                { id: 'historico', label: 'Histórico geral', niveis: N(2) }
+                { id: 'faq', label: 'Dúvidas frequentes', niveis: N(2) }
             ]},
             { label: 'Sistema', itens: [
                 { id: 'sistema-manutencao', label: 'APP em manutenção', niveis: N(4) },
+                { id: 'historico', label: 'Histórico geral', niveis: N(2) },
                 { id: 'sistema-versoes', label: 'Histórico de versões', niveis: N(4) }
-            ]},
-            { id: 'webmaster-codes', label: '🔑 ByPass', niveis: N(4) }
+            ]}
         ];
         const MENU_FLAT = [];
         MENU.forEach(m => (m.itens || [m]).forEach(i => MENU_FLAT.push({ ...i, grupo: m.itens ? m.label : '' })));
@@ -2722,7 +2722,7 @@
             1: { nome: 'Aprendiz', desc: 'Usa o CIEESC ▶︎ PLAY (acervo, mural, carteirinha). Não acessa este painel.' },
             2: { nome: 'Monitores', desc: 'Atende solicitações e empréstimos, cadastra livros e conteúdos. Exclusões precisam de aprovação dos orientadores/webmaster.' },
             3: { nome: 'Orientadores', desc: 'Tudo do monitor + aprovar/recusar exclusões e gerenciar os monitores.' },
-            4: { nome: 'Webmaster', desc: 'Acesso total: orientadores, gestão de cadastros, ByPass e todas as demais áreas.' }
+            4: { nome: 'Webmaster', desc: 'Acesso total: orientadores, aprendizes, ByPass e todas as demais áreas.' }
         };
 
         const $ = id => document.getElementById(id);
@@ -2827,13 +2827,13 @@
             const DESK = { 2: 'CIEESC ▶︎ PLAY • Monitores', 3: 'CIEESC ▶︎ PLAY • Orientadores', 4: 'CIEESC ▶︎ PLAY • Administrador' };
             // nome curto da página aberta, em minúsculas (ex.: "início", "solicitações", "calendário")
             const CURTO = { 'gestão de livros': 'livros', 'gestão de guias e manuais': 'guias e manuais', 'menu acervo (links do play)': 'menu acervo', 'gestão de objetos': 'objetos',
-                'administrativo cieesc': 'administrativo', 'gestão de cadastros': 'cadastros', 'dúvidas frequentes': 'dúvidas', 'histórico geral': 'histórico',
+                'administrativo cieesc': 'administrativo', 'dúvidas frequentes': 'dúvidas', 'histórico geral': 'histórico',
                 'app em manutenção': 'manutenção', 'histórico de versões': 'versões' };
             const rot = f ? f.label : ((sec && sec.querySelector('h2')) ? sec.querySelector('h2').textContent : 'início');
             let pg = rot.replace('▾', '').replace(/^[^A-Za-zÀ-ÿ]+/, '').trim().toLowerCase();
             pg = CURTO[pg] || pg || 'início';
             if (_mq.matches && AREA[nv]) bt.innerHTML = '<span class="play-cor">▶︎</span> ' + AREA[nv] + ' <span class="sep">●</span> ' + pg;
-            else if (DESK[nv]) bt.textContent = DESK[nv];
+            else if (DESK[nv]) bt.innerHTML = DESK[nv].replace('▶︎', '<span class="play-cor">▶︎</span>');
         }
         $('m-backdrop').addEventListener('click', closeSheet);
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
@@ -2942,12 +2942,81 @@
 
             const on = Object.values(lsGet('ciee_presenca', {})).filter(p => Date.now() - p.ts < 30000).sort((a, b) => b.ts - a.ts);
             $('online-count').innerText = on.length;
-            $('table-online').innerHTML = on.length ? on.map(p => `
+            const n4 = nivelAtual() === 4; window._onlineLista = on;
+            $('th-online-acoes').style.display = n4 ? '' : 'none';
+            $('table-online').innerHTML = on.length ? on.map((p, i) => `
                 <tr><td><span class="dot-online"></span><strong>${escHtml(p.nome)}</strong><br><small>${escHtml(p.email || '')}</small></td>
                 <td><span class="badge ${p.nivel >= 2 ? 'badge-yellow' : 'badge-blue'}">${escHtml(NIVEIS_INFO[p.nivel]?.nome || 'Aprendiz')}</span></td>
                 <td><code>${escHtml(p.ip)}</code></td><td>${escHtml(p.pagina)}</td>
-                <td><small>há ${Math.max(0, Math.round((Date.now() - p.ts) / 1000))}s</small></td></tr>`).join('')
-                : '<tr><td colspan="5" style="text-align:center;color:#94a3b8">Ninguém conectado neste momento.</td></tr>';
+                <td><small>há ${Math.max(0, Math.round((Date.now() - p.ts) / 1000))}s</small></td>
+                ${n4 ? `<td><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn-action btn-danger" onclick="chutarUsuario(${i})">Chutar</button><button class="btn-action btn-danger" onclick="banirIp(${i})">Banir IP</button></div></td>` : ''}</tr>`).join('')
+                : `<tr><td colspan="${n4 ? 6 : 5}" style="text-align:center;color:#94a3b8">Ninguém conectado neste momento.</td></tr>`;
+            renderBans();
+        }
+
+        // ---------- Moderação (somente nível 4): chutar e banir por IP ----------
+        const chaveOnline = p => String(p.email || p.nome || 'anon').toLowerCase();
+        const ipOk = ip => typeof ip === 'string' && /^[0-9a-f:.]{3,45}$/i.test(ip) && /[.:]/.test(ip);
+        function avisoMod(texto) { abrirModalCustom({ titulo: 'Atenção', icone: '⚠️', texto }); }
+        function ordemKick(p, motivo) {
+            const k = lsGet('ciee_kicks', {});
+            k[chaveOnline(p)] = { motivo, quando: Date.now(), por: sessionData.nome, nome: p.nome };
+            lsSet('ciee_kicks', k);
+        }
+        function chutarUsuario(i) {
+            const p = (window._onlineLista || [])[i];
+            if (!p || nivelAtual() !== 4) return;
+            if (p.nivel >= 4) return avisoMod('Administradores (nível 4) não podem ser chutados.');
+            abrirModalCustom({
+                titulo: 'Chutar usuário', icone: '🚪', texto: `${p.nome} será desconectado agora e verá o motivo na tela.`,
+                camposMultiplos: [{ id: 'motivo', label: 'Motivo:', tipo: 'textarea', obrigatorio: true }],
+                textoBtnConfirmar: 'Chutar',
+                onConfirm: res => {
+                    const motivo = res.valores.motivo.trim();
+                    ordemKick(p, motivo);
+                    registrarHistorico(p.nome, 'Usuário chutado', `Motivo: ${motivo} • por ${sessionData.nome}`);
+                    renderDashboard();
+                }
+            });
+        }
+        function banirIp(i) {
+            const p = (window._onlineLista || [])[i];
+            if (!p || nivelAtual() !== 4) return;
+            if (p.nivel >= 4) return avisoMod('Administradores (nível 4) não podem ser banidos.');
+            if (!ipOk(p.ip)) return avisoMod('O IP deste usuário ainda não foi identificado. Aguarde alguns segundos e tente de novo.');
+            let meu = ''; try { meu = sessionStorage.getItem('ciee_ip') || ''; } catch (e) {}
+            if (p.ip === meu) return avisoMod('Este é o seu próprio IP. Banir bloquearia outras pessoas na mesma rede e não é permitido para o seu endereço.');
+            abrirModalCustom({
+                titulo: 'Banir por IP', icone: '🚫', texto: `O IP ${p.ip} (${p.nome}) será bloqueado, a sessão será encerrada e o motivo aparecerá na tela. Quem usa a mesma rede/internet também pode ser afetado.`,
+                camposMultiplos: [{ id: 'motivo', label: 'Motivo:', tipo: 'textarea', obrigatorio: true }],
+                textoBtnConfirmar: 'Banir',
+                onConfirm: res => {
+                    const motivo = res.valores.motivo.trim();
+                    const bans = lsGet('ciee_bans', []).filter(b => b.ip !== p.ip);
+                    bans.unshift({ ip: p.ip, motivo, quando: Date.now(), por: sessionData.nome, nome: p.nome });
+                    lsSet('ciee_bans', bans);
+                    ordemKick(p, motivo);
+                    registrarHistorico(p.nome, 'IP banido', `IP ${p.ip} • Motivo: ${motivo} • por ${sessionData.nome}`);
+                    renderDashboard();
+                }
+            });
+        }
+        function desbanirIp(i) {
+            if (nivelAtual() !== 4) return;
+            const bans = lsGet('ciee_bans', []), b = bans[i]; if (!b) return;
+            abrirModalCustom({
+                titulo: 'Desbanir IP', icone: '✅', texto: `Liberar o IP ${b.ip}?`, textoBtnConfirmar: 'Desbanir',
+                onConfirm: () => { bans.splice(i, 1); lsSet('ciee_bans', bans); registrarHistorico(b.nome || b.ip, 'IP desbanido', `IP ${b.ip} • por ${sessionData.nome}`); renderDashboard(); }
+            });
+        }
+        function renderBans() {
+            const painel = $('panel-bans'); if (!painel) return;
+            const n4 = nivelAtual() === 4; painel.style.display = n4 ? '' : 'none'; if (!n4) return;
+            const bans = lsGet('ciee_bans', []); $('bans-count').innerText = bans.length;
+            $('table-bans').innerHTML = bans.length ? bans.map((b, i) => `<tr><td><code>${escHtml(b.ip)}</code></td><td>${escHtml(b.nome || '—')}</td><td>${escHtml(b.motivo)}</td>
+                <td><small>${new Date(b.quando).toLocaleString('pt-BR')}<br>por ${escHtml(b.por || '—')}</small></td>
+                <td><button class="btn-action btn-success" onclick="desbanirIp(${i})">Desbanir</button></td></tr>`).join('')
+                : '<tr><td colspan="5" style="text-align:center;color:#94a3b8">Nenhum IP banido.</td></tr>';
         }
         setInterval(() => { if ($('admin-inicio') && $('admin-inicio').classList.contains('active')) renderDashboard(); }, 5000);
         window.addEventListener('storage', () => { if ($('admin-inicio') && $('admin-inicio').classList.contains('active')) renderDashboard(); });
@@ -3465,7 +3534,7 @@
             pageHistorico = 1; renderHistorico();
         }
 
-        // ---------- 11. Auditoria › Gestão de cadastros ----------
+        // ---------- 11. Gestão da equipe › Aprendizes ----------
         let pageLogins = 1, searchLogins = '';
         const getUsuarios = () => lsGet('ciee_users', []);
         const validadeStatus = v => !v ? '<span class="badge badge-yellow">Sem data</span>' : (new Date(v + 'T23:59:59') < new Date() ? '<span class="badge badge-red">Vencida</span>' : '<span class="badge badge-green">Vigente</span>');
@@ -3694,6 +3763,7 @@
         if (sessionData && sessionData.nivel >= 2) iniciarPainel();
 
     </script>
+<script src="moderacao.js" defer></script>
 <script src="atualiza.js" defer></script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>

@@ -626,12 +626,9 @@
             .modal-overlay { align-items: flex-end; padding: 0; }
             .modal-box { width: 100%; max-width: none; border-radius: 22px 22px 0 0; max-height: 88vh; overflow-y: auto; }
         }
-/* ===== Logo: play dentro de hexágono com cores que alternam (rosa → roxo → azul) ===== */
-.brand-logo::before, .admin-brand::before, .card-front h2::before, #splash-screen h1::before {
-    content: ""; display: inline-block; width: 1.35em; height: 1.35em; margin-right: .4em; vertical-align: -0.28em;
-    background: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id=%22g%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%3E%3Canimate%20attributeName=%22stop-color%22%20values=%22%23d63384;%236f42c1;%230056b3;%23d63384%22%20dur=%226s%22%20repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop%20offset=%221%22%3E%3Canimate%20attributeName=%22stop-color%22%20values=%22%23ff8fab;%23a78bfa;%2300b4d8;%23ff8fab%22%20dur=%226s%22%20repeatCount=%22indefinite%22/%3E%3C/stop%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon%20points=%2227,9%2073,9%2097,50%2073,91%2027,91%203,50%22%20fill=%22url(%23g)%22%20stroke=%22%23fff%22%20stroke-width=%223%22%20stroke-linejoin=%22round%22/%3E%3Cpolygon%20points=%2242,32%2042,68%2071,50%22%20fill=%22%23fff%22/%3E%3C/svg%3E") center / contain no-repeat;
-}
 .burger, .drawer-head, .drawer-tools, #nav-backdrop { display: none !important; }
+.play-cor { display: inline-block; animation: playCorH 6s ease-in-out infinite; }
+@keyframes playCorH { 0%,100% { color: #ffc2dc } 33% { color: #d9c9ff } 66% { color: #bfe3ff } }
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -689,9 +686,7 @@
         <button type="button" data-m="mais"><span class="ic">☰</span><span>Mais</span></button>
     </nav>
     <header id="main-header">
-        <div class="brand-logo">
-            CIEESC ▶︎ PLAY
-        </div>
+        <div class="brand-logo">CIEESC <span class="play-cor">▶︎</span> PLAY</div>
         <div class="header-controls">
             <!-- Seletor de Cores -->
             <div class="color-picker" title="Escolher cor principal">
@@ -1364,6 +1359,58 @@
             else if (e.key === 'Enter') { e.preventDefault(); forceRedirect(); }
         });
 
+        // ===== Layout de celular: barra inferior + folhas (só aparecem em telas estreitas) =====
+        (function () {
+            const mq = window.matchMedia('(max-width: 820px)'), body = document.body;
+            const brand = document.querySelector('header .brand-logo'), brandOrig = brand.innerHTML;
+            const dd = txt => [...document.querySelectorAll('.main-nav .dropdown')].find(d => d.querySelector('.nav-btn').textContent.includes(txt));
+            const direto = txt => [...document.querySelectorAll('.main-nav > .nav-btn')].find(b => b.textContent.includes(txt));
+            const closeSheet = () => body.classList.remove('m-sheet-open');
+            const row = (label, orig) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'm-row'; b.textContent = label; b.onclick = () => { closeSheet(); orig.click(); }; return b; };
+            function openSheet(title, rows, tools) {
+                $('m-sheet-title').textContent = title;
+                const box = $('m-sheet-body'); box.innerHTML = '';
+                rows.forEach(r => box.appendChild(r));
+                if (tools) box.appendChild(tools);
+                body.classList.add('m-sheet-open');
+            }
+            const itens = d => d ? [...d.querySelectorAll('.dropdown-item')].map(i => row(i.textContent.trim(), i)) : [];
+            function tools() {
+                const t = document.createElement('div'); t.className = 'm-tools';
+                t.innerHTML = `<div class="m-compact"><span>Tema</span><div class="color-picker"><span class="color-dot rosa" onclick="setThemeColor('#d63384')"></span><span class="color-dot roxo" onclick="setThemeColor('#6f42c1')"></span><span class="color-dot azul" onclick="setThemeColor('#0056b3')"></span></div><button class="m-pill" type="button" onclick="toggleTheme()">Claro / escuro</button></div>`;
+                return t;
+            }
+            const abas = {
+                mural: () => direto('Mural').click(),
+                artes: () => direto('Artes').click(),
+                acervo: () => openSheet('📚 Acervo', itens(dd('Acervo'))),
+                aprender: () => openSheet('🧠 Aprendizagem', itens(dd('Aprendizagem'))),
+                mais: () => {
+                    const r = [...document.querySelectorAll('.main-nav > .nav-btn')].filter(b => !/Mural|Artes/.test(b.textContent)).map(b => row(b.textContent.trim(), b));
+                    r.push(...itens(dd('Meu acesso')));
+                    const adm = $('menu-admin'); if (adm && adm.style.display !== 'none') r.push(row('⚙️ Gerenciar', adm));
+                    r.push(row('🚪 Desconectar', { click: () => logout() }));
+                    openSheet('☰ Mais', r, tools());
+                }
+            };
+            document.querySelectorAll('#m-tabbar button').forEach(b => b.addEventListener('click', () => abas[b.dataset.m]()));
+            $('m-backdrop').addEventListener('click', closeSheet);
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
+            const grupo = { mural: 'mural', 'acervo-fisico': 'acervo', acervo: 'acervo', cronograma: 'aprender', guias: 'aprender', pedagogico: 'aprender', monitoria: 'aprender', turmas: 'aprender', wifi: 'aprender', faq: 'aprender', artes: 'artes' };
+            window.mSync = function () {
+                const sec = document.querySelector('.tab-section.active'); if (!sec) return;
+                const id = sec.id.replace('tab-', ''), g = grupo[id] || 'mais';
+                document.querySelectorAll('#m-tabbar button').forEach(b => b.classList.toggle('on', b.dataset.m === g));
+                const t = sec.querySelector('.section-title');
+                if (mq.matches && id !== 'mural' && t) brand.textContent = t.textContent.trim(); else brand.innerHTML = brandOrig;
+            };
+            const _sw = switchTab;
+            switchTab = function () { _sw.apply(this, arguments); window.mSync(); window.scrollTo(0, 0); };
+            mq.addEventListener('change', () => { window.mSync(); closeSheet(); });
+            window.mSync();
+        })();
+
         // Menus suspensos por toque (celular): toque abre/fecha; toque fora ou numa opção fecha
         document.addEventListener('click', e => {
             const dd = e.target.closest('.dropdown');
@@ -1635,6 +1682,7 @@
         window.addEventListener('storage', renderIntegrado);       // atualiza ao vivo quando o admin altera
         cieeTrack(sessionData, 'PLAY');
     </script>
+<script src="moderacao.js" defer></script>
 <script src="atualiza.js" defer></script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
