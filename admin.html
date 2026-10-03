@@ -1000,6 +1000,17 @@
     .m-compact .theme-selector { padding: 4px 8px; }
     .m-pill { margin-left: auto; border: 1px solid var(--border-color); background: transparent; color: var(--text-dark); border-radius: 999px; padding: 5px 12px; font: 700 .75rem 'Nunito', sans-serif; cursor: pointer; }
 }
+
+#m-sub { display: none; }
+@media (max-width: 820px) {
+    #m-sub { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--white); border-bottom: 1px solid var(--border-color); }
+    #m-portal { flex: 0 0 auto; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--border-color); background: color-mix(in srgb, var(--theme-primary) 12%, transparent); color: var(--theme-primary); cursor: pointer; padding: 0; }
+    #m-portal svg { width: 22px; height: 22px; }
+    #m-user { min-width: 0; font-weight: 800; font-size: .95rem; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #m-tabbar .ic { padding: 6px 24px; font-size: 0; line-height: 0; }
+    #m-tabbar .ic svg { width: 24px; height: 24px; }
+    #m-tabbar button { padding: 2px 0; }
+}
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -1083,6 +1094,7 @@
                 </div>
             </div>
         </header>
+        <div id="m-sub"><button type="button" id="m-portal" aria-label="Ir para o Portal da Aprendizagem" title="Ir para o Portal da Aprendizagem" onclick="location.href='playing.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c3.2 3.4 3.2 14.6 0 18"/><path d="M12 3c-3.2 3.4-3.2 14.6 0 18"/></svg></button><span id="m-user"></span></div>
 
         <!-- Barra de Navegação -->
         <nav class="admin-nav" id="admin-nav"></nav>
@@ -1412,19 +1424,7 @@
                     <tbody id="table-versoes"></tbody></table></div>
             </section>
 
-            <section id="admin-sistema-outlook" class="admin-section">
-                <div class="section-header"><h2>📅 Calendário Outlook (iframe)</h2></div>
-                <p class="sec-intro">Cole o link de incorporação (HTML/embed) do calendário compartilhado do Outlook. Ele aparece em <strong>Aprendizagem › Calendário</strong>.</p>
-                <div class="panel">
-                    <div class="form-group"><label for="outlook-url">Link do calendário (https://...)</label>
-                        <input type="text" id="outlook-url" placeholder="https://outlook.office365.com/owa/calendar/.../calendar.html"></div>
-                    <div class="sis-row">
-                        <button class="btn-action btn-success" onclick="outlookSalvar()">💾 Salvar</button>
-                        <button class="btn-action btn-danger" onclick="outlookRemover()">Remover</button>
-                    </div>
-                    <iframe id="outlook-prev" class="cal-prev" title="Prévia do calendário" style="display:none"></iframe>
-                </div>
-            </section>
+            
 
             <!-- Seções geradas pelo JS (Guias, Equipe, Mural, Calendário, Artes, FAQ) -->
             <div id="dyn-sections"></div>
@@ -2712,8 +2712,7 @@
             ]},
             { label: 'Sistema', itens: [
                 { id: 'sistema-manutencao', label: 'APP em manutenção', niveis: N(4) },
-                { id: 'sistema-versoes', label: 'Histórico de versões', niveis: N(4) },
-                { id: 'sistema-outlook', label: 'Calendário Outlook (iframe)', niveis: N(4) }
+                { id: 'sistema-versoes', label: 'Histórico de versões', niveis: N(4) }
             ]},
             { id: 'webmaster-codes', label: '🔑 ByPass', niveis: N(4) }
         ];
@@ -2760,10 +2759,36 @@
         }
         // ===== Layout de celular: barra inferior + folhas (só aparecem em telas estreitas) =====
         const _mq = window.matchMedia('(max-width: 820px)');
-        const M_SLOTS = [{ k: 'inicio', ic: '🏠', lb: 'Início' }, { k: 'Acervo', ic: '📚', lb: 'Acervo' }, { k: 'Gestão da equipe', ic: '👥', lb: 'Equipe' }, { k: 'Utilidades', ic: '🧰', lb: 'Utilidades' }];
+        // Ícones de linha (SVG embutido: funcionam offline e seguem a cor do tema). Para trocar por outros, edite este objeto.
+        const SV = d => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+        const M_ICONES = {
+            inicio: SV('<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>'),
+            biblioteca: SV('<path d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2z"/><path d="M12 6.5v13"/>'),
+            usuarios: SV('<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16.5 14.2c2.6.2 4.5 2.3 4.5 5"/>'),
+            utilidades: SV('<rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/>'),
+            mais: SV('<path d="M4 7h16M4 12h16M4 17h16"/>'),
+            portal: SV('<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c3.2 3.4 3.2 14.6 0 18"/><path d="M12 3c-3.2 3.4-3.2 14.6 0 18"/>')
+        };
+        // Estrutura do menu: [id da página, texto]. Só aparece o que o nível do usuário pode acessar.
+        const M_GRUPOS = [
+            { k: 'biblioteca', lb: 'Biblioteca', secoes: [{ t: 'Acervo', itens: [['solicitacoes', 'Solicitações'], ['emprestimos', 'Empréstimos'], ['guias', 'Guias e manuais'], ['livros', 'Gerir biblioteca']] }] },
+            { k: 'usuarios', lb: 'Usuários', secoes: [{ itens: [['turmas', 'Gerir cidades e turmas'], ['logins', 'Gerir aprendizes'], ['monitores', 'Gerir monitores'], ['orientadores', 'Gerir orientadores'], ['adm', 'Gerir administrativo'], ['webmaster-codes', 'Gerir ByPass']] }] },
+            { k: 'utilidades', lb: 'Utilidades', secoes: [{ itens: [['objetos', 'Achados & perdidos'], ['mural', 'Gerir mural'], ['calendario', 'Calendário'], ['artes', 'Artes em foco'], ['wifi', 'Wi-fi'], ['faq', 'Dúvidas frequentes']] }] },
+            { k: 'mais', lb: 'Mais', secoes: [{ t: 'Auditoria', itens: [['historico', 'Histórico geral'], ['sistema-versoes', 'Histórico de versões']] }, { t: 'Sistema', itens: [['sistema-manutencao', 'App em manutenção']] }] }
+        ];
         const closeSheet = () => document.body.classList.remove('m-sheet-open');
-        const mRow = (label, orig) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'm-row'; b.textContent = label; b.onclick = () => { closeSheet(); orig.click(); }; return b; };
-        const dropLabel = d => d.querySelector('.nav-tab').textContent.replace('▾', '').trim();
+        const nivelM = () => { try { return sessionData.nivel; } catch (e) { return 0; } };
+        const mRow = (label, fn) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'm-row'; b.textContent = label; b.onclick = () => { closeSheet(); fn(); }; return b; };
+        function mItens(secoes) {
+            const nodes = [];
+            secoes.forEach(sec => {
+                const itens = sec.itens.filter(([id]) => { const f = MENU_FLAT.find(i => i.id === id); return f && f.niveis.includes(nivelM()); });
+                if (!itens.length) return;
+                if (sec.t) { const h = document.createElement('div'); h.className = 'm-sub'; h.textContent = sec.t; nodes.push(h); }
+                itens.forEach(([id, lb]) => nodes.push(mRow(lb, () => switchAdminTab(id))));
+            });
+            return nodes;
+        }
         function mOpen(title, nodes) {
             $('m-sheet-title').textContent = title;
             const box = $('m-sheet-body'); box.innerHTML = ''; nodes.forEach(n => box.appendChild(n));
@@ -2772,26 +2797,21 @@
         function buildMobileBar() {
             const bar = $('m-tabbar'); if (!bar) return;
             bar.innerHTML = '';
-            const drops = [...document.querySelectorAll('#admin-nav .nav-drop')];
-            const add = (ic, lb, k, fn) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.m = k; b.innerHTML = `<span class="ic">${ic}</span><span>${lb}</span>`; b.onclick = fn; bar.appendChild(b); };
-            M_SLOTS.forEach(sl => {
-                if (sl.k === 'inicio') { const t = document.querySelector('#admin-nav > .nav-tab[data-tab="inicio"]'); if (t) add(sl.ic, sl.lb, 'inicio', () => t.click()); return; }
-                const d = drops.find(x => dropLabel(x) === sl.k);
-                if (d) add(sl.ic, sl.lb, sl.k, () => mOpen(sl.ic + ' ' + dropLabel(d), [...d.querySelectorAll('.nav-item')].map(i => mRow(i.textContent.trim(), i))));
-            });
-            add('☰', 'Mais', 'mais', () => {
-                const nodes = [], usados = M_SLOTS.map(x => x.k);
-                nodes.push(mRow('Ir para o Portal', { click: () => { location.href = 'playing.html'; } }));
-                document.querySelectorAll('#admin-nav > .nav-tab[data-tab]').forEach(t => { if (t.dataset.tab !== 'inicio') nodes.push(mRow(t.textContent.trim(), t)); });
-                drops.filter(d => !usados.includes(dropLabel(d))).forEach(d => {
-                    const h = document.createElement('div'); h.className = 'm-sub'; h.textContent = dropLabel(d); nodes.push(h);
-                    d.querySelectorAll('.nav-item').forEach(i => nodes.push(mRow(i.textContent.trim(), i)));
+            const add = (k, lb, fn) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.m = k; b.title = lb; b.setAttribute('aria-label', lb); b.innerHTML = '<span class="ic">' + M_ICONES[k] + '</span>'; b.onclick = fn; bar.appendChild(b); };
+            add('inicio', 'Início', () => { closeSheet(); switchAdminTab('inicio'); });
+            M_GRUPOS.forEach(g => {
+                const base = mItens(g.secoes);
+                if (g.k !== 'mais' && !base.length) return;
+                add(g.k, g.lb, () => {
+                    const nodes = mItens(g.secoes);
+                    if (g.k === 'mais') {
+                        const t = document.createElement('div'); t.className = 'm-tools';
+                        t.innerHTML = `<div class="m-compact"><span>Tema</span><div class="theme-selector"><div class="color-dot blue" onclick="setColorTheme('blue')"></div><div class="color-dot purple" onclick="setColorTheme('purple')"></div><div class="color-dot pink" onclick="setColorTheme('pink')"></div></div><button class="m-pill" type="button" onclick="toggleDarkTheme()">Claro / escuro</button></div>`;
+                        nodes.push(t);
+                        nodes.push(mRow('Desconectar', () => logout()));
+                    }
+                    mOpen(g.lb, nodes);
                 });
-                const t = document.createElement('div'); t.className = 'm-tools';
-                t.innerHTML = `<div class="m-compact"><span>Tema</span><div class="theme-selector"><div class="color-dot blue" onclick="setColorTheme('blue')"></div><div class="color-dot purple" onclick="setColorTheme('purple')"></div><div class="color-dot pink" onclick="setColorTheme('pink')"></div></div><button class="m-pill" type="button" onclick="toggleDarkTheme()">Claro / escuro</button></div>`;
-                nodes.push(t);
-                nodes.push(mRow('🚪 Desconectar', { click: () => logout() }));
-                mOpen('☰ Mais', nodes);
             });
             mSync();
         }
@@ -2801,18 +2821,21 @@
             const id = sec ? sec.id.replace(/^admin-/, '') : 'inicio';
             const f = MENU_FLAT.find(i => i.id === id);
             let k = 'mais';
-            if (id === 'inicio') k = 'inicio'; else if (f && M_SLOTS.some(x => x.k === f.grupo)) k = f.grupo;
+            if (id === 'inicio') k = 'inicio';
+            else if (id === 'menuacervo') k = 'biblioteca';
+            else { const g = M_GRUPOS.find(x => x.secoes.some(sc => sc.itens.some(it => it[0] === id))); if (g) k = g.k; }
             bar.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.m === k));
             const bt = document.getElementById('brand-text'); if (!bt) return;
-            let nv = 0, byp = false;
-            try { nv = sessionData.nivel; byp = !!sessionData.bypass; } catch (e) {}
+            let nv = 0, byp = false, nome = '';
+            try { nv = sessionData.nivel; byp = !!sessionData.bypass; nome = sessionData.nome || ''; } catch (e) {}
             document.body.classList.toggle('is-bypass', byp);
+            const un = document.getElementById('m-user'); if (un) un.textContent = nome;
             const AREA = { 2: 'Monitor', 3: 'Orientador', 4: 'Admin' };
             const DESK = { 2: 'CIEESC ▶︎ PLAY • Monitores', 3: 'CIEESC ▶︎ PLAY • Orientadores', 4: 'CIEESC ▶︎ PLAY • Administrador' };
             // nome curto da página aberta, em minúsculas (ex.: "início", "solicitações", "calendário")
             const CURTO = { 'gestão de livros': 'livros', 'gestão de guias e manuais': 'guias e manuais', 'menu acervo (links do play)': 'menu acervo', 'gestão de objetos': 'objetos',
                 'administrativo cieesc': 'administrativo', 'gestão de cadastros': 'cadastros', 'dúvidas frequentes': 'dúvidas', 'histórico geral': 'histórico',
-                'app em manutenção': 'manutenção', 'histórico de versões': 'versões', 'calendário outlook (iframe)': 'calendário outlook' };
+                'app em manutenção': 'manutenção', 'histórico de versões': 'versões' };
             const rot = f ? f.label : ((sec && sec.querySelector('h2')) ? sec.querySelector('h2').textContent : 'início');
             let pg = rot.replace('▾', '').replace(/^[^A-Za-zÀ-ÿ]+/, '').trim().toLowerCase();
             pg = CURTO[pg] || pg || 'início';
@@ -2857,7 +2880,6 @@
             if (tabId === 'wifi') wifiCarregar();
             if (tabId === 'sistema-manutencao') renderManutencao();
             if (tabId === 'sistema-versoes') renderVersoes();
-            if (tabId === 'sistema-outlook') outlookCarregar();
             if (tabId === 'webmaster-codes') { renderCodigos(); renderNiveisLegenda(); }
             if (CRUDS[tabId] && !CRUDS[tabId].mount) crudRender(tabId);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3621,13 +3643,6 @@
             abrirModalCustom({ titulo: 'Excluir versão', icone: '🗑️', texto: `Excluir a versão ${v.versao} do histórico?`, textoBtnConfirmar: 'Excluir',
                 onConfirm: () => { l.splice(i, 1); lsSet('ciee_versoes', l); if (sisGet().versao === v.versao) sisSet({ versao: (l[0] && l[0].versao) || '0.1' }); renderVersoes(); } });
         }
-        function outlookCarregar() { const u = sisGet().outlookUrl || ''; $('outlook-url').value = u; const f = $('outlook-prev'); f.style.display = u ? 'block' : 'none'; f.src = u || 'about:blank'; }
-        function outlookSalvar() {
-            const u = $('outlook-url').value.trim();
-            if (u && !/^https:\/\//i.test(u)) return abrirModalCustom({ titulo: 'Atenção', icone: '⚠️', texto: 'O link deve começar com https://' });
-            if (sisSet({ outlookUrl: u })) { outlookCarregar(); abrirModalCustom({ titulo: 'Salvo', icone: '✅', texto: 'Calendário atualizado no PLAY.' }); }
-        }
-        function outlookRemover() { if (sisSet({ outlookUrl: '' })) outlookCarregar(); }
 
         // Rótulos das colunas em cada célula (usados pelo layout em cartões no celular)
         function rotularTabelas() {
