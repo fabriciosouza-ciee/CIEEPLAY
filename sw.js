@@ -1,8 +1,5 @@
-// Notificações push (OneSignal) no mesmo service worker do app
-try { importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js'); } catch (e) {}
-
 // Troque o número da versão a cada atualização dos arquivos para o celular baixar a nova versão.
-const VERSAO = 'ciee-play-v9';
+const VERSAO = 'ciee-play-v10';
 const ARQUIVOS = ['./', './index.html', './playing.html', './admin.html', './manifest.json',
   './icon-192.png', './icon-512.png', './maskable-512.png', './icone-ios-v2.png', './atualiza.js', './favicon-48.png'];
 
