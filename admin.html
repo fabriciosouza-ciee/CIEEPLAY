@@ -990,6 +990,9 @@
     body.is-bypass .user-badge-admin { display: none; }
     .admin-brand { font-size: 1.35rem; }
 }
+
+.admin-brand .sep { font-size: .55em; opacity: .75; vertical-align: middle; margin: 0 2px; }
+@media (max-width: 820px) { .admin-brand { font-size: 1.15rem; } }
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -2799,7 +2802,14 @@
             document.body.classList.toggle('is-bypass', byp);
             const AREA = { 2: 'Monitor', 3: 'Orientador', 4: 'Admin' };
             const DESK = { 2: 'CIEESC ▶︎ PLAY • Monitores', 3: 'CIEESC ▶︎ PLAY • Orientadores', 4: 'CIEESC ▶︎ PLAY • Administrador' };
-            if (_mq.matches && AREA[nv]) bt.innerHTML = '<span class="play-cor">▶︎</span> ' + AREA[nv];
+            // nome curto da página aberta, em minúsculas (ex.: "início", "solicitações", "calendário")
+            const CURTO = { 'gestão de livros': 'livros', 'gestão de guias e manuais': 'guias e manuais', 'menu acervo (links do play)': 'menu acervo', 'gestão de objetos': 'objetos',
+                'administrativo cieesc': 'administrativo', 'gestão de logins': 'logins', 'dúvidas frequentes': 'dúvidas', 'histórico geral': 'histórico',
+                'app em manutenção': 'manutenção', 'histórico de versões': 'versões', 'calendário outlook (iframe)': 'calendário outlook' };
+            const ativo = document.querySelector('#admin-nav .nav-item.active') || document.querySelector('#admin-nav > .nav-tab.active');
+            let pg = ativo ? ativo.textContent.replace('▾', '').replace(/^[^A-Za-zÀ-ÿ]+/, '').trim().toLowerCase() : 'início';
+            pg = CURTO[pg] || pg || 'início';
+            if (_mq.matches && AREA[nv]) bt.innerHTML = '<span class="play-cor">▶︎</span> ' + AREA[nv] + ' <span class="sep">●</span> ' + pg;
             else if (DESK[nv]) bt.textContent = DESK[nv];
         }
         $('m-backdrop').addEventListener('click', closeSheet);
