@@ -631,6 +631,14 @@
 @keyframes playCorH { 0%,100% { color: #ffc2dc } 33% { color: #d9c9ff } 66% { color: #bfe3ff } }
 .brand-logo .sep { font-size: .55em; opacity: .8; vertical-align: middle; margin: 0 2px; }
 @media (max-width: 820px) { header .brand-logo { font-size: 1.1rem; } }
+.cal-tools { display: none; }
+@media (max-width: 820px) {
+    .cal-tools { display: flex; align-items: center; gap: 8px; padding: 6px 12px; font-size: .8rem; font-weight: 800; color: var(--text-muted); }
+    .cal-tools button, .cal-tools a { border: 1px solid var(--border-color); background: transparent; color: var(--text-dark); border-radius: 999px; padding: 4px 14px; font: 700 .85rem 'Nunito', sans-serif; text-decoration: none; cursor: pointer; }
+    .cal-tools a { margin-left: auto; }
+    .cal-box { position: relative; overflow: hidden; width: 100%; height: calc(100dvh - 260px); min-height: 380px; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+    .cal-box .cal-frame { position: absolute; top: 0; left: 0; margin: 0; border: 0; border-radius: 0; max-width: none; transform-origin: 0 0; }
+}
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -1580,6 +1588,19 @@
             l.forEach(x => { if (!_seguro(x.link)) return; const a = document.createElement('a'); a.className = 'dropdown-item extra-acervo'; a.target = '_blank'; a.rel = 'noopener'; a.href = x.link; a.textContent = x.titulo + ' ↗'; m.appendChild(a); });
         }
 
+        // Calendário do Outlook no celular: o iframe é renderizado numa largura "virtual" e reduzido para caber na tela (sem rolagem lateral)
+        const CAL_LARGURAS = [1100, 960, 840, 720, 620, 520];
+        let calIdx = 3; try { const z = parseInt(localStorage.getItem('ciee_cal_zoom'), 10); if (z >= 0 && z < CAL_LARGURAS.length) calIdx = z; } catch (e) {}
+        function calFit() {
+            const box = document.getElementById('cal-box'), fr = document.getElementById('cal-frame'); if (!box || !fr) return;
+            if (!window.matchMedia('(max-width: 820px)').matches) { fr.style.width = ''; fr.style.height = ''; fr.style.transform = ''; return; }
+            const w = box.clientWidth; if (!w) return;
+            const virt = CAL_LARGURAS[calIdx], esc = Math.min(1, w / virt);
+            fr.style.width = virt + 'px'; fr.style.height = Math.round(box.clientHeight / esc) + 'px'; fr.style.transform = 'scale(' + esc + ')';
+        }
+        function calZoom(d) { calIdx = Math.max(0, Math.min(CAL_LARGURAS.length - 1, calIdx + d)); try { localStorage.setItem('ciee_cal_zoom', calIdx); } catch (e) {} calFit(); }
+        window.addEventListener('resize', calFit);
+
         function renderCalendario() {
             const ev = _ls('ciee_calendario') || [];
             const OUTLOOK_PADRAO = 'https://outlook.office365.com/owa/calendar/c96206fd55374c17a589d14fd674a745@cieesc.org.br/20fe2a726f2144cc915440895f4bfae82551157630324397568/calendar.html';
@@ -1598,8 +1619,9 @@
             });
             if (atual) html += '</div>';
             const sec = document.getElementById('tab-cronograma');
-            const frame = _seguro(url) ? `<iframe class="cal-frame" src="${_esc(url)}" title="Calendário compartilhado do Outlook" loading="lazy" referrerpolicy="no-referrer"></iframe>` : '<!-- iframe do calendário do Outlook: informe o link em Admin › Sistema › Calendário Outlook -->';
+            const frame = _seguro(url) ? `<div class="cal-tools"><span>Zoom</span><button type="button" onclick="calZoom(-1)" aria-label="Diminuir">−</button><button type="button" onclick="calZoom(1)" aria-label="Aumentar">+</button><a href="${_esc(url)}" target="_blank" rel="noopener">Tela cheia</a></div><div class="cal-box" id="cal-box"><iframe id="cal-frame" class="cal-frame" src="${_esc(url)}" title="Calendário compartilhado do Outlook" loading="lazy" referrerpolicy="no-referrer"></iframe></div>` : '<!-- iframe do calendário do Outlook: informe o link em Admin › Sistema › Calendário Outlook -->';
             sec.innerHTML = `<h2 class="section-title">Calendário</h2><p class="section-desc">Fique por dentro dos eventos, atividades e feriados.</p>` + frame + (_seguro(url) ? '' : (html || _vazio('Nenhum evento programado por enquanto.')));
+            setTimeout(calFit, 0); const cb = document.getElementById('cal-box'); if (cb && window.ResizeObserver) new ResizeObserver(calFit).observe(cb);
         }
 
         function renderGuias() {
