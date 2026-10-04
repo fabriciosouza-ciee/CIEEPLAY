@@ -629,6 +629,8 @@
 .burger, .drawer-head, .drawer-tools, #nav-backdrop { display: none !important; }
 .play-cor { display: inline-block; animation: playCorH 6s ease-in-out infinite; }
 @keyframes playCorH { 0%,100% { color: #ffc2dc } 33% { color: #d9c9ff } 66% { color: #bfe3ff } }
+.brand-logo .sep { font-size: .55em; opacity: .8; vertical-align: middle; margin: 0 2px; }
+@media (max-width: 820px) { header .brand-logo { font-size: 1.1rem; } }
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
@@ -686,7 +688,7 @@
         <button type="button" data-m="mais"><span class="ic">☰</span><span>Mais</span></button>
     </nav>
     <header id="main-header">
-        <div class="brand-logo">CIEESC <span class="play-cor">▶︎</span> PLAY</div>
+        <div class="brand-logo">CIEESC <span class="play-cor">▶︎</span> PLAY <span class="sep">●</span> Portal</div>
         <div class="header-controls">
             <!-- Seletor de Cores -->
             <div class="color-picker" title="Escolher cor principal">
@@ -978,7 +980,6 @@
             <div class="card-validade">
                 <span id="card-validade">Validade: -</span>
             </div>
-            <button class="btn-action" style="background: rgba(255,255,255,0.2); color: white;" onclick="alert('Download iniciado!')">⬇️ Baixar Carteirinha</button>
         </div>
     </section>
 
@@ -1403,7 +1404,7 @@
                 const id = sec.id.replace('tab-', ''), g = grupo[id] || 'mais';
                 document.querySelectorAll('#m-tabbar button').forEach(b => b.classList.toggle('on', b.dataset.m === g));
                 const t = sec.querySelector('.section-title');
-                if (mq.matches && id !== 'mural' && t) brand.textContent = t.textContent.trim(); else brand.innerHTML = brandOrig;
+                brand.innerHTML = brandOrig;
             };
             const _sw = switchTab;
             switchTab = function () { _sw.apply(this, arguments); window.mSync(); window.scrollTo(0, 0); };
